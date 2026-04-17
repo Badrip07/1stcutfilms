@@ -1,0 +1,126 @@
+.admin-body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 20% 0%, #161616 0%, #0a0a0a 48%);
+  color: #e8e8e8;
+  --fb-accent: #facc15;
+  --fb-accent-dim: #ca8a04;
+  --fb-sidebar: #111111;
+  --fb-card: #161616;
+  --fb-border: #2a2a2a;
+}
+
+.admin-shell {
+  min-height: 100vh;
+}
+
+.admin-body .text-accent {
+  color: var(--fb-accent) !important;
+}
+
+.admin-body .btn-accent {
+  background-color: var(--fb-accent);
+  border-color: var(--fb-accent);
+  color: #0a0a0a;
+  font-weight: 600;
+}
+
+.admin-body .btn-accent:hover {
+  background-color: var(--fb-accent-dim);
+  border-color: var(--fb-accent-dim);
+  color: #0a0a0a;
+}
+
+.admin-sidebar {
+  background: linear-gradient(180deg, #141414 0%, #0e0e0e 100%);
+  border-right: 1px solid var(--fb-border);
+  min-height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.admin-logo {
+  max-height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.admin-card {
+  background: var(--fb-card);
+  border: 1px solid var(--fb-border);
+  border-radius: 0.7rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+}
+
+.admin-nav-link {
+  color: #bdbdbd;
+  border-radius: 0.55rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.admin-nav-link:hover,
+.admin-nav-link.active {
+  color: #fff;
+  background: #1c1c1c;
+  border-color: #2f2f2f;
+}
+
+.admin-nav-link.active {
+  border-left: 3px solid var(--fb-accent);
+}
+
+.admin-nav-heading {
+  letter-spacing: 0.08em;
+}
+
+.admin-main {
+  min-height: 100vh;
+}
+
+.admin-content {
+  max-width: 1200px;
+}
+
+.admin-stat-card {
+  transition: transform 0.18s ease, border-color 0.18s ease;
+}
+
+.admin-stat-card:hover {
+  transform: translateY(-2px);
+  border-color: #474747;
+}
+
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select {
+  background-color: #0f0f0f;
+  border-color: var(--fb-border);
+  color: #eee;
+}
+
+[data-bs-theme="dark"] .form-control:focus,
+[data-bs-theme="dark"] .form-select:focus {
+  border-color: #575757;
+  box-shadow: 0 0 0 0.2rem rgba(250, 204, 21, 0.14);
+}
+
+[data-bs-theme="dark"] .table {
+  --bs-table-bg: transparent;
+  --bs-table-border-color: var(--fb-border);
+}
+
+[data-bs-theme="dark"] .table-hover > tbody > tr:hover > * {
+  --bs-table-accent-bg: #1a1a1a;
+}
+
+.sticky-actions {
+  position: sticky;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.98), rgba(10, 10, 10, 0.78));
+  border: 1px solid var(--fb-border);
+  border-radius: 0.65rem;
+  padding: 0.7rem;
+  backdrop-filter: blur(6px);
+  z-index: 20;
+}

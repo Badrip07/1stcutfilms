@@ -1,0 +1,49 @@
+a.glassBtn {
+  text-decoration: none;
+  color: #e8f0ee;
+  display: inline-block;
+}
+
+.glassBtn {
+    padding: .92rem 2.1rem .6rem 2.1rem;
+    font-size: 1.95rem;
+    color: #e8f0ee;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid #facc15;
+    border-radius: 1.5rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgb(250 204 21 / 20%), inset 0 2px 6px rgba(255, 255, 255, 0.4), inset 0 -4px 6px rgb(250 204 21 / 40%);
+    overflow: hidden;
+    letter-spacing: 0.02rem;
+    width: max-content;
+    line-height: 3rem;
+    min-height: 4.7rem;
+}
+
+.blob {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, #f2cf01, #ffffff00);
+    border-radius: 50%;
+    filter: blur(30px);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.glassBtn span {
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+}
+
+.glassBtn:hover {
+  background: rgba(250, 204, 21, 0.15);
+  border-color: #facc15;
+  box-shadow: 0 8px 20px rgb(250 204 21 / 40%), inset 0 2px 6px rgba(255, 255, 255, 0.4), inset 0 -4px 6px rgb(250 204 21 / 60%);
+}
