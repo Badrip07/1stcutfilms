@@ -110,14 +110,10 @@ const Footer = () => {
             <div className={styles.brandWrapper}>
               <div className={styles.brandTextBlock}>
                 <img
-                  src="/footer-logo.png"
-                  alt="Yellow Dot"
-                  className={styles.brandDot}
+                  src="/1st-cut-logo.png"
+                  alt="Prites Photography"
+                  className={styles.footerBrandLogo}
                 />
-                {/* <p className={styles.brandLine1}>
-                  <span className={styles.brandHighlight}>FRAME</span>
-                </p>
-                <p className={styles.brandLine2}>BRAINS</p> */}
               </div>
 
               {/* PLUS CROSS LINES */}

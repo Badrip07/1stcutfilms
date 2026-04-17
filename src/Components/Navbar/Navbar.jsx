@@ -66,7 +66,7 @@ const Navbar = () => {
             >
               <div className={styles.heroOverlay}>
                   <img
-                    src="/logos/logo1.png"
+                    src="/1st-cut-logo.png"
                     alt=""
                     className={styles.heroBadgeStrip}
                   />
@@ -129,7 +129,7 @@ const Navbar = () => {
 
             <div className={styles.logoContainer}>
               <img
-                src="/logos/logo1.png"
+                src="/navbarlogo.png"
                 alt="Prites Photography"
                 className={styles.logoImg}
               />
