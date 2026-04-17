@@ -8,7 +8,7 @@ const PUBLIC_SITE_ORIGIN =
 
 const defaults = {
   hero: {
-    backgroundVideo: "/6-home-page-banner.mp4",
+    backgroundVideo: "/adidas-home-banner-video.mp4",
     badgeImage: "/logo.png",
     titlePrefix: "WE",
     titleHighlight: "CREATE STORIES",

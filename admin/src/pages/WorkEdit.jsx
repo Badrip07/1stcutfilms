@@ -148,7 +148,7 @@ export default function WorkEdit() {
       setError("");
       const picker = document.createElement("input");
       picker.type = "file";
-      picker.accept = "image/*,video/*";
+      picker.accept = "image/*";
       picker.click();
       const file = await new Promise((resolve) => {
         picker.onchange = () => resolve(picker.files?.[0] || null);
@@ -158,6 +158,34 @@ export default function WorkEdit() {
       fd.append("file", file);
       const res = await api("/admin/media", { method: "POST", body: fd });
       updatePayload((p) => ({ ...p, [targetKey]: res.url || "" }));
+    } catch (e) {
+      setError(e.message || "Upload failed");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function pickAndUploadMp4Video() {
+    try {
+      setUploading(true);
+      setError("");
+      const picker = document.createElement("input");
+      picker.type = "file";
+      picker.accept = "video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov";
+      picker.click();
+      const file = await new Promise((resolve) => {
+        picker.onchange = () => resolve(picker.files?.[0] || null);
+      });
+      if (!file) return;
+      const mime = (file.type || "").toLowerCase();
+      if (mime && !mime.startsWith("video/")) {
+        setError("Please choose a video file (MP4, WebM, or MOV).");
+        return;
+      }
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await api("/admin/media", { method: "POST", body: fd });
+      updatePayload((p) => ({ ...p, bunnyUrl: res.url || "" }));
     } catch (e) {
       setError(e.message || "Upload failed");
     } finally {
@@ -374,8 +402,19 @@ export default function WorkEdit() {
               label="Direct video URL (bunnyUrl)"
               value={payloadForm.bunnyUrl}
               onChange={(v) => updatePayload((p) => ({ ...p, bunnyUrl: v }))}
-              placeholder="https://..."
+              placeholder="/uploads/... or https://..."
             />
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-secondary mt-2"
+              onClick={() => pickAndUploadMp4Video()}
+              disabled={uploading}
+            >
+              Upload MP4 / video
+            </button>
+            <div className="form-text">
+              Saves to <code>/uploads/</code> on the API server (same as images). Main site must be able to load that URL (use full API origin in production if needed).
+            </div>
           </div>
           <div className="col-md-6">
             <Field

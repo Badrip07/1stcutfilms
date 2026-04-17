@@ -195,7 +195,6 @@ const Footer = () => {
             </Link>
             <p>Powerd by <a href="mailto:info@addon-it.com" className={styles.bottomLink}>ADDON IT SOLUTIONS</a></p>
           </div>
-          <img src="/footer-right-logo.png" alt="footer Logo" className={styles.bottomLogoImg} /> 
         </div>
       </div>
     </footer>

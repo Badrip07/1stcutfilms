@@ -3,8 +3,8 @@
   min-height: 100vh;
   background: radial-gradient(circle at 20% 0%, #161616 0%, #0a0a0a 48%);
   color: #e8e8e8;
-  --fb-accent: #facc15;
-  --fb-accent-dim: #ca8a04;
+  --fb-accent: #f0f0f0;
+  --fb-accent-dim: #c8c8c8;
   --fb-sidebar: #111111;
   --fb-card: #161616;
   --fb-border: #2a2a2a;
@@ -102,7 +102,7 @@
 [data-bs-theme="dark"] .form-control:focus,
 [data-bs-theme="dark"] .form-select:focus {
   border-color: #575757;
-  box-shadow: 0 0 0 0.2rem rgba(250, 204, 21, 0.14);
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.2);
 }
 
 [data-bs-theme="dark"] .table {

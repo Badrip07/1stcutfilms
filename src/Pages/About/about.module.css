@@ -2,7 +2,7 @@
 
 :root {
   --black: #000;
-  --accent-yellow: #facc15;
+  --accent-yellow: #f0f0f0;
   --accent-purple: #9333ea;
   --tile-gap: 12px;
   --tile-border: rgba(255, 255, 255, 0.06);
@@ -115,13 +115,13 @@
 .heroSubTitle {
   font-size: 2.6rem !important;
   line-height: 2.2rem;
-  color: #facc15;
+  color: #f0f0f0;
   margin: 0 0 1.5rem 0;
   text-transform: uppercase;
   font-weight: bold;
 }
 .highlight {
-  color: var(--accent-yellow, #facc15);
+  color: var(--accent-yellow, #f0f0f0);
 }
 
 .heroDescription {
@@ -131,7 +131,7 @@
 }
 
 .heroCta {
-  background-color: var(--accent-yellow, #facc15);
+  background-color: var(--accent-yellow, #f0f0f0);
   color: #000;
   font-weight: 500;
   font-size: 2.2rem;
@@ -190,7 +190,7 @@
 
 .marqueeWrapper {
   width: 100%;
-  background: #facc15;
+  background: #f0f0f0;
   overflow: hidden;
   position: relative;
   padding: 0;

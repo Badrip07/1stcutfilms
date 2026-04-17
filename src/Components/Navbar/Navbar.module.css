@@ -60,7 +60,7 @@
 }
 
 .activeLink {
-  color: #facc15;
+  color: #f5f5f5;
   text-decoration: none;
   font-weight: 800;
   font-size: 1.7rem;
@@ -224,7 +224,7 @@
 }
 
 .mobileLinkActive {
-  color: #facc15;
+  color: #f5f5f5;
 }
 
 /* Stagger menu items (header + links) */
@@ -304,7 +304,7 @@
 }
 
 .navLink:hover {
-  color: #facc15;
+  color: #f5f5f5;
 }
 
 .rightLine1 {

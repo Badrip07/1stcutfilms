@@ -1,14 +1,14 @@
 /* ==================== FOOTER BASE ==================== */
 .footer {
   width: 100vw;
-  background-color: #d04544;
+  background-color: #000;
   color: #fff;
   overflow-x: hidden;
 }
 
 /* ==================== MARQUEE SECTION ==================== */
 .footerMarquee {
-  background:#ce3636;
+  background: #000;
   overflow: hidden;
   width: 100%;
   position: relative;
@@ -26,10 +26,6 @@
   display: flex;
   position: relative;
   width: fit-content;
-}
-.bottomLogoImg{
-  width: 100%;
-  max-width: 180px;
 }
 .marqueeTrack {
   display: flex;
@@ -330,7 +326,8 @@
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  width: 49%;
+  width: 100%;
+  flex-wrap: wrap;
 }
 .bottonContentFirst p, .bottonContentFirst p a{
   text-transform: none;

@@ -12,12 +12,83 @@ import { usePageSections } from "../../hooks/usePageSections.js";
 import { homeContentDefaults } from "./homeContentDefaults.js";
 import { apiUrl } from "../../lib/apiBase.js";
 import { workData as bundledWorkData } from "../Work/workData.js";
+import { useCoarseVideoLoading } from "../../hooks/useCoarseVideoLoading.js";
 
 const resolveHomeAssetUrl = (url = "") => {
   if (typeof url !== "string") return url;
   if (url.startsWith("/uploads/")) return apiUrl(url);
   return url;
 };
+
+/** Vimeo background embeds are heavy on iOS; lazy-load and use tap-to-play on coarse devices. */
+function LazyVimeoCasePlayer({ videoId, title, className, coarse, posterSrc }) {
+  const hostRef = useRef(null);
+  const [ioReady, setIoReady] = useState(false);
+  const [tapped, setTapped] = useState(false);
+
+  useEffect(() => {
+    if (coarse) return;
+    const el = hostRef.current;
+    if (!el) return;
+    const ob = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) setIoReady(true);
+      },
+      { rootMargin: "120px", threshold: 0.06 }
+    );
+    ob.observe(el);
+    return () => ob.disconnect();
+  }, [coarse, videoId]);
+
+  const showIframe = coarse ? tapped : ioReady;
+  const src = showIframe
+    ? `https://player.vimeo.com/video/${videoId}?autoplay=1&muted=1&loop=1&background=1&controls=0`
+    : undefined;
+
+  return (
+    <div ref={hostRef} className={styles.caseVideoMediaHost}>
+      {showIframe ? (
+        <iframe
+          src={src}
+          className={className}
+          title={title || "Vimeo video"}
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowFullScreen
+        />
+      ) : coarse ? (
+        <button
+          type="button"
+          className={styles.caseVimeoPosterBtn}
+          onClick={() => setTapped(true)}
+          aria-label="Load and play video preview"
+        >
+          {posterSrc ? (
+            <img
+              src={posterSrc}
+              alt=""
+              className={styles.casePosterFull}
+              decoding="async"
+            />
+          ) : null}
+          <span className={styles.casePlayBadge} aria-hidden="true">
+            ▶
+          </span>
+        </button>
+      ) : (
+        <div className={styles.caseVimeoPlaceholder}>
+          {posterSrc ? (
+            <img
+              src={posterSrc}
+              alt=""
+              className={styles.casePosterFull}
+              decoding="async"
+            />
+          ) : null}
+        </div>
+      )}
+    </div>
+  );
+}
 
 /* ✅ CLIENT CARD COMPONENT */
 const ClientCard = ({ item, onHover, isHovered, resolveAssetUrl }) => {
@@ -394,6 +465,7 @@ const GlassButton_OLD_DELETE = ({ onClick, label = "START A PROJECT" }) => {
 
 const Home = () => {
   const resolveAssetUrl = resolveHomeAssetUrl;
+  const coarse = useCoarseVideoLoading();
 
   const { workData: portfolio } = useWorkData();
   const { sections: pageSections } = usePageSections("home");
@@ -638,7 +710,6 @@ const Home = () => {
 
     return () => {
       animations.forEach((anim) => anim.kill());
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 
@@ -670,9 +741,6 @@ const Home = () => {
 
     return () => {
       anims.kill();
-      ScrollTrigger.getAll().forEach((t) => {
-        if (t.trigger === section) t.kill();
-      });
     };
   }, []);
 
@@ -777,15 +845,23 @@ const Home = () => {
         {/* HERO SECTION */}
         <header className={styles.hero}>
           <div className={styles.heroBackground}>
-            <video
-              className={styles.heroVideo}
-              src={resolveAssetUrl(homeContent.hero.backgroundVideo)}
-              autoPlay
-              loop
-              muted
-              playsInline
-            />
-
+            {coarse ? (
+              <img
+                className={styles.heroVideo}
+                src="/contact-banner.jpeg"
+                alt=""
+              />
+            ) : (
+              <video
+                className={styles.heroVideo}
+                src={resolveAssetUrl(homeContent.hero.backgroundVideo)}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+              />
+            )}
           </div>
 
           <div className={styles.heroContent}>
@@ -887,7 +963,7 @@ const Home = () => {
           </div>
 
           <div className={styles.videoGrid}>
-            {videoWorks.slice(0, 5).map((work) => (
+            {videoWorks.slice(0, coarse ? 3 : 5).map((work) => (
               <VideoCard
                 key={work.id}
                 video={work}
@@ -995,18 +1071,30 @@ const Home = () => {
 
           <div className={styles.caseItems}>
             {casePosts.map(({ post, config }, idx) => {
-              const rawVideo = post.vimeoUrl || post.video;
-              const isVimeo = typeof rawVideo === "string" && rawVideo.includes("vimeo.com");
-              const postTitle = config?.titleOverride || post.subtitle || post.category || post.title || "CREATIVE BRANDFILM";
-              const postDescription =
-                config?.descriptionOverride ||
-                post.content ||
-                homeContent.caseSection.fallbackDescription;
+              const bunnyRaw =
+                post.bunnyUrl ||
+                post.bunnyPlaybackUrl ||
+                post.bunnyVideoUrl ||
+                "";
+              const bunnyStr =
+                typeof bunnyRaw === "string" ? bunnyRaw.trim() : "";
+              const videoField =
+                typeof post.video === "string" ? post.video.trim() : "";
+              const directSrc =
+                bunnyStr ||
+                (videoField && !videoField.includes("vimeo.com") ? videoField : "");
+              const hasDirectMp4 = Boolean(directSrc);
 
+              const vimeoStr =
+                typeof post.vimeoUrl === "string" ? post.vimeoUrl.trim() : "";
+              const vimeoCandidate =
+                !hasDirectMp4 &&
+                (vimeoStr ||
+                  (videoField.includes("vimeo.com") ? videoField : ""));
               let vimeoId = null;
-              if (isVimeo) {
+              if (vimeoCandidate) {
                 try {
-                  const url = new URL(rawVideo);
+                  const url = new URL(vimeoCandidate);
                   const parts = url.pathname.split("/").filter(Boolean);
                   const last = parts[parts.length - 1];
                   if (last && /^\d+$/.test(last)) {
@@ -1017,25 +1105,34 @@ const Home = () => {
                 }
               }
 
+              const postTitle = config?.titleOverride || post.subtitle || post.category || post.title || "CREATIVE BRANDFILM";
+              const postDescription =
+                config?.descriptionOverride ||
+                post.content ||
+                homeContent.caseSection.fallbackDescription;
+              const casePoster =
+                resolveAssetUrl(post.thumbnail || post.brandImage || "") ||
+                "";
+
               return (
                 <div key={`${post.id}-${idx}`} className={styles.caseItem}>
                   <div className={styles.caseVideo} data-animate="fade-up">
                     {vimeoId ? (
-                      <iframe
-                        src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&muted=1&loop=1&background=1&controls=0`}
-                        className={styles.caseVideoPlayer}
+                      <LazyVimeoCasePlayer
+                        videoId={vimeoId}
                         title={post.title}
-                        allow="autoplay; fullscreen; picture-in-picture"
-                        allowFullScreen
+                        className={styles.caseVideoPlayer}
+                        coarse={coarse}
+                        posterSrc={casePoster}
                       />
                     ) : (
                       <video
-                        src={resolveAssetUrl(post.video)}
+                        src={resolveAssetUrl(directSrc || post.video)}
                         poster={resolveAssetUrl(post.thumbnail)}
-                        preload="auto"
+                        preload={coarse ? "none" : "metadata"}
                         loop
                         muted
-                        autoPlay
+                        autoPlay={!coarse}
                         playsInline
                         className={styles.caseVideoPlayer}
                       />
@@ -1261,23 +1358,36 @@ const VideoCard = ({ video, onClick }) => {
   const overlayAnimationRef = useRef(null);
   const [isInView, setIsInView] = useState(false);
 
-  // Intersection Observer to load video only when in viewport
+  // Intersection Observer to load video only when in viewport; re-apply when CMS `video.src` changes
   useEffect(() => {
+    const el = videoRef.current;
+    const card = cardRef.current;
+    if (!el || !card) return;
+
+    const resolved = resolveHomeAssetUrl(video.src);
+
+    const applySrcIfNeeded = () => {
+      if (!videoRef.current) return;
+      const v = videoRef.current;
+      if (!resolved) {
+        v.pause();
+        v.removeAttribute("src");
+        delete v.dataset.cmsSrc;
+        v.load();
+        return;
+      }
+      if (v.dataset.cmsSrc === video.src) return;
+      v.dataset.cmsSrc = video.src;
+      v.src = resolved;
+      v.load();
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setIsInView(true);
-            // Load video source when in viewport with a small delay to prevent simultaneous loads
-            if (videoRef.current && !videoRef.current.src) {
-              // Use requestAnimationFrame to prevent blocking
-              requestAnimationFrame(() => {
-                if (videoRef.current) {
-                  videoRef.current.src = video.src;
-                  videoRef.current.load();
-                }
-              });
-            }
+            requestAnimationFrame(() => applySrcIfNeeded());
           }
         });
       },
@@ -1287,15 +1397,18 @@ const VideoCard = ({ video, onClick }) => {
       }
     );
 
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
+    observer.observe(card);
+
+    // If the card is already in view, IntersectionObserver may not fire again after a src change
+    const r = card.getBoundingClientRect();
+    const margin = 150;
+    const vh = window.innerHeight || 0;
+    const nearViewport = r.top < vh + margin && r.bottom > -margin;
+    if (nearViewport) {
+      requestAnimationFrame(() => applySrcIfNeeded());
     }
 
-    return () => {
-      if (cardRef.current) {
-        observer.unobserve(cardRef.current);
-      }
-    };
+    return () => observer.disconnect();
   }, [video.src]);
 
   useEffect(() => {
@@ -1367,19 +1480,28 @@ const VideoCard = ({ video, onClick }) => {
           }
         }
       });
-    } else if (videoRef.current && !videoRef.current.src) {
-      // If video not loaded yet, load it now
-      videoRef.current.src = video.src;
-      videoRef.current.load();
-      videoRef.current.addEventListener(
-        "loadeddata",
-        () => {
-          if (videoRef.current) {
-            videoRef.current.play().catch(() => {});
-          }
-        },
-        { once: true }
-      );
+    } else if (videoRef.current) {
+      const v = videoRef.current;
+      const resolved = resolveHomeAssetUrl(video.src);
+      if (!resolved) return;
+      if (v.dataset.cmsSrc !== video.src) {
+        v.dataset.cmsSrc = video.src;
+        v.src = resolved;
+        v.load();
+      }
+      if (v.readyState >= 2) {
+        v.play().catch(() => {});
+      } else {
+        v.addEventListener(
+          "loadeddata",
+          () => {
+            if (videoRef.current) {
+              videoRef.current.play().catch(() => {});
+            }
+          },
+          { once: true }
+        );
+      }
     }
   };
 
@@ -1425,7 +1547,6 @@ const VideoCard = ({ video, onClick }) => {
   };
 
   const handleCardClick = (e) => {
-    console.log("VideoCard clicked, opening modal for:", video.title);
     if (onClick) {
       onClick();
     }

@@ -80,9 +80,9 @@ function apiRootHtml() {
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Prites Photography API</title>
   <style>
-    :root { color-scheme: light dark; --fg: #e8e6e3; --bg: #121418; --muted: #8b8680; --accent: #c4a574; --card: #1a1d24; }
+    :root { color-scheme: light dark; --fg: #e8e6e3; --bg: #121418; --muted: #8b8680; --accent: #e8e8e8; --card: #1a1d24; }
     @media (prefers-color-scheme: light) {
-      :root { --fg: #1a1a1a; --bg: #f4f2ef; --muted: #5c5855; --accent: #8b6914; --card: #fff; }
+      :root { --fg: #1a1a1a; --bg: #f4f2ef; --muted: #5c5855; --accent: #5c5c5c; --card: #fff; }
     }
     * { box-sizing: border-box; }
     body { font-family: ui-sans-serif, system-ui, sans-serif; margin: 0; min-height: 100vh;

@@ -783,7 +783,7 @@ const VideoCard = ({ video, onClick }) => {
     });
 
     gsap.to(wrapperRef.current, {
-      boxShadow: "0 12px 36px rgba(250, 204, 21, 0.4)",
+      boxShadow: "0 12px 36px rgba(255, 255, 255, 0.28)",
       duration: 0.3,
       ease: "power2.out",
     });
