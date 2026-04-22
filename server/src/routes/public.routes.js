@@ -32,6 +32,7 @@ publicRouter.get("/work", async (_req, res) => {
        FROM work_posts
        ORDER BY category, sort_order, legacy_numeric_id`
     );
+    res.set("Cache-Control", "no-store");
     return res.json(buildWorkData(rows));
   } catch (e) {
     console.error(e);
@@ -55,6 +56,7 @@ publicRouter.get("/work-post/:category/:legacyId", async (req, res) => {
     const row = rows[0];
     const payload =
       typeof row.payload === "string" ? JSON.parse(row.payload) : row.payload;
+    res.set("Cache-Control", "no-store");
     return res.json({ id: legacyId, category, ...payload });
   } catch (e) {
     console.error(e);
