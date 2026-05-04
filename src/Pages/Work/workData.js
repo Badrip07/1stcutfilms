@@ -1,463 +1,285 @@
-// Work data — API overwrites this when VITE_API_URL is set. For static hosting,
-// add youtubeUrl on each video item or map ids in public/work-youtube-overrides.json.
+// Video tab: 10 posts from admin (YouTube) + 5 legacy posts (Vimeo until you add youtubeUrl in admin).
 export const workData = {
   video: [
-    {
-      id: 1,
-      title: "STIGA-DESTINY",
-      subtitle: "PRODUCT RELEASE",
-      vimeoUrl: "https://vimeo.com/1119350392",
-      bunnyUrl: "/work-video/4c4d6c0f-16494b14.mp4",
-      brandImage: "/work/logos/Stiga.png",
-    },
-    {
-      id: 2,
-      title: "A RETRO TALE – Sell With Art",
-      subtitle: "BRAND FILM",
-      vimeoUrl: "https://vimeo.com/1143353570",
-      bunnyUrl: "/6-home-page-banner.mp4",
-      category: "",
-      brandImage: "/work/logos/A-Retro-Tale-Logo.png",
-      content: "A Retro Tale sells high fashion, second hand. To make that work, the brand needs to feel as good as the products. They came to us needing a film that captured the process, the care, and the culture behind what they do. Without it feeling like an ad. That's the brief we love.",
-      additionalContent: [
-        {
-          vimeoUrl: "https://vimeo.com/1172128959",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1172129009",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1172128987",
-        },
-      ],
-    }, 
-    {
-      id: 3,
-      title: "PROfeel – UHT",
-      subtitle: "TV SPOT",
-      vimeoUrl: "https://vimeo.com/1119349439",
-      bunnyUrl: "/work-video/68ce7dfd-4c2ae82e.mp4",
-      brandImage: "/work/logos/PROfeelR_logo_white_RGB.png",
-      category: "",
-      content: "PROfeel were launching something genuinely new. A protein drink that needs no refrigeration, and they wanted the world to know it in the most unexpected way possible. No safe product video. They wanted weird, fun, and impossible to ignore. After a lot of p lanning and a lot of ideas thrown at the wall, we landed on something we're pretty proud of.",
-      campaignStills: [
-        "/work/work-3-1.jpg",
-        "/work/work-3-2.jpg",
-        "/work/work-3-3.jpg",
-        "/work/work-3-4.jpg",
-        "/work/work-3-5.jpg",
-        "/work/work-3-5-6.jpg",
-        "/work/work-3-5-7.webp",
-      ], 
-      additionalContent: [
-        {
-          vimeoUrl: "https://vimeo.com/1172132281",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1172132294",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1172132266",
-        },
-      ],
-    },
-    {
-      id: 4,
-      title: "NIUT",
-      subtitle: "CAMPAIGN",
-      vimeoUrl: "https://vimeo.com/1094033050",
-      bunnyUrl: "/work-video/8f453ee9-b80511a8.mp4",
-      category: "",
-      brandImage: "/work/logos/Niut-Logo-Yellow.png",
-      content: "NIUT is on a mission to remove the taboo around pleasure. A brand built by women, for women, with a simple message: enjoying yourself is something worth celebrating. We've had the pleasure of producing all kinds of creative content for them along the way. Most recently a full campaign with a strong nod to Sex and the City that was as fun to make as it looks on screen. Charming, bold, and completely unapologetic. Exactly how it should be.",
-      additionalContent: [
-        {
-          vimeoUrl: "https://vimeo.com/1094033057",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1094033031",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1094033007",
-        },
-      ],
-    },
-    {
-      id: 5,
-      title: "SUHSIYAMA",
-      subtitle: "BRANDFILM",
-      vimeoUrl: "https://vimeo.com/969540501",
-      bunnyUrl: "/work-video/98d7c575-a1578499.mp4",
-      category: "",
-      brandImage: "/work/logos/Sushi-Yama.png",
-      content: "SushiYama came to us to find their unique voice in their communication. We put together a solid content package focused on branding. This engaging video shows off their innovative spirit, commitment to quality, and the fresh, vibrant vibe that sets them apart in the sushi world. From a standout branding film to eye - catching ads and lively 2D animations, we've got Sushiyama covered!",
-      additionalContent: [
-        {
-          vimeoUrl: "https://vimeo.com/1172205673",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1172205650",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1172205600",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1172204781",
-        },
-      ],
-      campaignStills: [
-        "/work/AR507097_7_11zon.jpg",
-        "/work/AR507844_5_11zon.jpg",
-        "/work/AR507862_2_11zon.jpg",
-        "/work/AR508384_6_11zon.jpg",
-        "/work/AR508458_4_11zon.jpg",
-        "/work/AR508492_3_11zon.jpg",
-        "/work/AR509396_8_11zon.jpg",
-        "/work/magnific-gXCwT9rrbvX06bo0ml3z-Untitled_1.35_1_11zon.jpg",
-      ], 
-    },
-    {
-      id: 6,
-      title: "PROFEEL",
-      subtitle: "ALWAYS ON",
-      vimeoUrl: "https://vimeo.com/1172466982",
-      bunnyUrl: "/work-video/ca6a52e2-9d8be726.mp4",
-      category: "",
-      brandImage: "/work/logos/PROfeelR_logo_white_RGB.png",
-      content: "MWhat started as a random meeting request turned into one of our most exciting partnerships. PROfeel keeps us on our toes with always - on productions every quarter, alongside larger international campaigns spanning TV, OOH, and beyond. They push us to grow, experiment, and constantly raise the bar. The kind of client that makes you better at what you do.",
-      additionalContent: [
-        {
-          vimeoUrl: "https://vimeo.com/1172467057",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1172467062",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1172467014",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1172466997",
-        },
-      ],
-      campaignStills: [
-        "/work/profeel1.jpg",
-        "/work/profeel2.jpg",
-        "/work/profeel3.jpg",
-        "/work/profeel4.jpg",
-        "/work/profeel5.jpg",
-        "/work/profeel6.jpg",
-        "/work/profeel7.jpg",
-        "/work/profeel8.jpg",
-        "/work/profeel9.jpg",
-      ],
-    },
-    {
-      id: 7,
-      title: "Länsförsäkringar",
-      subtitle: " CAMPAIGN",
-      vimeoUrl: "https://vimeo.com/1172468747",
-      bunnyUrl: "/work-video/d69adc86-a03cd9e4.mp4",
-      category: "",
-      brandImage: "/profeel.png",
-      content: "We were brought in by another agency to produce a campaign for Länsförsäkringar, centered around rebates and sustainability. On paper that might not sound like the most glamorous brief. But this one turned out to be something special. A genuine message, beautiful locations, and a cast of people that made every shoot day a pleasure. The kind of production where you're actually proud of what you're putting out into the world. Good work for a good cause. We love to see it.",
-      additionalContent: [
-        {
-          vimeoUrl: "https://vimeo.com/1172468762",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1172468775",
-        },
-      ],
-    },
-    {
-      id: 8,
-      title: "SENSTREET",
-      subtitle: "CAMPAIGN",
-      vimeoUrl: "https://vimeo.com/672660225",
-      bunnyUrl: "/work-video/d7caaf32-bca914e9.mp4",
-      category: "",
-      brandImage: "/profeel.png",
-      content: "We love working with food. Like, really love it. So when Senstreet came to us needing a set of short ads to showcase their menu, the feeling, and just how easy it is to order, we were all in from day one. The result was a series of clips that made people hungry in the best possible way. And as a fun side note, a BTS moment from this very shoot ended up becoming our most viewed clip on Instagram to date. Go check it out.",
-      additionalContent: [
-        {
-          vimeoUrl: "https://vimeo.com/672659559",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/672659876",
-        },
-      ],
-    },
-    {
-      id: 9,
-      title: "PRIMUSSILVA",
-      subtitle: "PRODUCT RELEASE",
-      vimeoUrl: "https://vimeo.com/1172201610",
-      bunnyUrl: "/work-video/video1.mp4",
-      category: "",
-      brandImage: "/work/logos/Primus.png",
-      content: "PrimusSilva needed content fast for their new running vest. Full reflective material, built for the night. We didn't overthink it. We took the gear, hit the streets of Stockholm late one evening, and let the city become the studio. Run and gun, no fuss. The reflective material came alive under the city lights in a way no controlled set could ever replicate. The result was a slick, high - energy edit that let the vest speak for itself, cut into multiple versions and ready to go.",
-      additionalContent: [
-        {
-          vimeoUrl: "http://vimeo.com/1172201579",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1172201545",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1172201512",
-        },
-      ],
-      campaignStills: [
-        "/work/01_SILVA_REFLECTIVE_VEST_3_11zon.jpg",
-        "/work/02_SILVA_REFLECTIVE_VEST_2_11zon.jpg",
-        "/work/03_SILVA_REFLECTIVE_VEST_1_11zon.jpg",
-        "/work/04_SILVA_REFLECTIVE_VEST_6_11zon.jpg",
-        "/work/05_SILVA_REFLECTIVE_VEST_4_11zon.jpg",
-        "/work/06_SILVA_REFLECTIVE_VEST_5_11zon.jpg",
-      ],
-    },
-    {
-      id: 10,
-      title: "AIMO",
-      subtitle: " Brandfilm",
-      vimeoUrl: "https://vimeo.com/1045636641",
-      bunnyUrl: "/work-video/video2.mp4",
-      category: "",
-      brandImage: "/works/logos/Aimo.png",
-      content: "When Aimo approached us to create their demo film, we saw an opportunity to break away from the traditional format of a talking head video. Instead of the CEO delivering a message straight to the camera, we pushed the boundaries and created somethin entirely unique. By blending dynamic 3D and VFX elements with visually stunning live - action scenes, we crafted an informative yet captivating film that truly stands out. The result? A powerful, engaging demo video that not only communicates Aimo’s vision but also leaves a lasting impression.",
-    },
-    {
-      id: 11,
-      title: "DEPEND",
-      subtitle: "CAMPAIGN",
-      thumbnail: "/video-11.jpg",
-      vimeoUrl: "https://vimeo.com/1172194756",
-      bunnyUrl: "/work-video/video3.mp4",
-      category: "",
-      brandImage: "/work/logos/Depend-logo.png",
-      content: "We've worked with Depend for years, but this time we wanted to raise the bar. Their O2 Care series, built around healthier nails and cuticles, deserved more than a straightforward product push. It needed to feel real, warm, and relevant to everyday women. So, we created a soft, living film that shows exactly when and how their nail oil fits into life. The kind of content that doesn't feel like an ad, even when it is one.",
-      campaignStills: [
-        "/work/AR500020_2_11zon.jpg",
-        "/work/AR500118---_5_11zon.jpg",
-        "/work/AR500128_3_11zon.jpg",
-        "/work/AR500143_4_11zon.jpg",
-        "/work/AR500195_1_11zon.jpg",
-      ],
-    },
-    {
-      id: 12,
-      title: "AIMO",
-      subtitle: "Sketches",
-      vimeoUrl: "https://vimeo.com/1172142423",
-      bunnyUrl: "/work-video/video4.mp4",
-      category: "",
-      brandImage: "/works/logos/Aimo.png",
-      content: "Aimo approached us with a unique request: to create a series of comedic sketches that would communicate their key messages in a lighthearted and engaging way. They wanted to tackle their pain points head - on but do so with humor and creativity, steering clear of traditional approaches. We developed a set of sketches that blended sharp humor with relatable storytelling, ensuring their audience could connect with the content while still addressing Aimo's challenges in an impactful way. The result? A series of memorable and entertaining videos that deliver Aimo's message in a fresh and unexpected format.",
-    },
-    {
-      id: 13,
-      title: "BALCK COFFE",
-      subtitle: "DOCUMENTERY",
-      vimeoUrl: "https://vimeo.com/392218352",
-      bunnyUrl: "/work-video/video5.mp4",
-      category: "",
-      brandImage: "/profeel.png",
-      content: "Our first ever client. And still the most ambitious thing we've ever made. We traveled deep into the rainforests of Ethiopia to document the world behind the coffee we drink every day. The farmers, the land, the process. And how Balck, through honest and fair trade, is quietly making that world a little better. Some projects you just don't forget.",
-      campaignStills: [
-        "/work/A7306348_1_11zon.jpg",
-        "/work/A7306400-2_4_11zon.jpg",
-        "/work/A7306415-2_5_11zon.jpg",
-        "/work/A7306437_8_11zon.jpg",
-        "/work/A7306474_7_11zon.jpg",
-        "/work/DSC00329_6_11zon.jpg",
-        "/work/DSC00525_3_11zon.jpg",
-        "/work/DSC00994_2_11zon.jpg",
-      ],
-    },
-    {
-      id: 14,
-      title: "INSURELLO",
-      subtitle: "TV SPOT",
-      vimeoUrl: "https://vimeo.com/994994366",
-      bunnyUrl: "/work-video/video6.mp4",
-      category: "",
-      brandImage: "/work/logos/Insurell.png",
-      content: "We've been working with Insurello for several years, focusing on sales - driven ads. This time, we got the chance to create a TV commercial that emphasizes their brand with humor and relatable situations, but with a twist. The commercial showcases Insurello’s fun and approachable side while highlighting their commitment to making insurance claims easy. From a standout TV spot to strategic ad placements, we've helped Insurello strengthen their brand and connect with a wider audience.",
-      campaignStills: [
-        "/work/AR507960-1_5_11zon.jpg",
-        "/work/AR507991-1_6_11zon.jpg",
-        "/work/AR508087-1_3_11zon.jpg",
-        "/work/AR508310-1_4_11zon.jpg",
-        "/work/AR508830-1_2_11zon.jpg",
-        "/work/AR509086-1_1_11zon.jpg",
-        "/work/AR509190_7_11zon.jpg",
-      ],
-    },
-    {
-      id: 15,
-      title: "FOODORA",
-      subtitle: "BRANDFILM",
-      vimeoUrl: "https://vimeo.com/873665223",
-      bunnyUrl: "/work-video/v5.mp4",
-      category: "",
-      brandImage: "/work/logos/Foodora-Logo-Cherry-Pink.png",
-      content: "Foodora didn't come to us for another ad. They needed something different. A film to strengthen their employer brand and give their office culture a real identity, the kind that makes people want to be part of something. We created a brand film built for recruitment, that didn't feel like a recruitment film. Just an honest look at who they actually are.",
-    },
-    {
-      id: 16,
-      title: "FOODORA",
-      subtitle: "DOCUMENTERY",
-      vimeoUrl: "https://vimeo.com/1172146248",
-      bunnyUrl: "/work-video/v6.mp4",
-      category: "",
-      brandImage: "/work/logos/Foodora-Logo-Cherry-Pink.png",
-      content: "Ten years of Foodora. To mark it properly, we traveled across Sweden and Norway and sat down with the people who lived it. Employees, memories, stories, and all the moments that shaped the company from day one. The result was a mini documentary that felt less like a celebration reel and more like a genuine piece of history.",
-    },
-    {
-      id: 17,
-      title: "MOVS",
-      subtitle: "PRODUCT RELEASE",
-      vimeoUrl: "https://vimeo.com/790110047",
-      bunnyUrl: "/work-video/v7.mp4",
-      category: "",
-      brandImage: "/work/logos/MOVS-Logo.png",
-      content: "MOVS came back to us with an exciting challenge — the launch of their first self - designed electric bike, a product aimed at revolutionizing the way we cycle in Sweden. With a strong focus on sleek design and a bold ambition to stand out as a distinctive brand, our task was to create a campaign that balanced premium product visuals with a playful sense of humor. The result? A standout production that captured both the elegance and personality of MOVS, setting the tone for their innovative vision in the cycling world.",
-      campaignStills: [
-        "/work/_DSC0065_fn_4_11zon.jpg",
-        "/work/_DSC0109_fn_5_11zon.jpg",
-        "/work/_DSC0114_fn_6_11zon.jpg",
-        "/work/_DSC0209_fn_1_11zon.jpg",
-        "/work/_DSC0266_fn_2_11zon.jpg",
-        "/work/_DSC0380_fn_3_11zon.jpg",
-      ],    
-    },
-    {
-      id: 18,
-      title: "CORLIN EYEWEAR",
-      subtitle: "CAMPAIGN",
-      vimeoUrl: "https://vimeo.com/712018517",
-      bunnyUrl: "/work-video/v8.mp4",      
-      category: "",
-      brandImage: "/profeel.png",
-      content: "Corlin was gearing up for an exciting collaboration, bringing iconic personalities into the world of eyewear design. They turned to us to produce two influencer partnership film, capturing the essence of bold, fashion - forward creativity. With a sharp, edgy aesthetic, we crafted dynamic content that seamlessly adapts across all platforms, ensuring Corlin’s vision reached the right audience with impact and style.",
-    },
-    {
-      id: 19,
-      title: "LYSA",
-      subtitle: "CAMPAIGN",
-      vimeoUrl: "https://vimeo.com/1045650416",
-      bunnyUrl: "/work-video/v9.mp4",
-      category: "",
-      brandImage: "/profeel.png",
-      content: "We created a film introducing Lysa’s new pension savings service – using creative angles and dynamic editing to bring energy to an important and often challenging topic. With graphics & animations and a script infused with humor and warmth, we delivered all the key information without compromise. Who said talking about pensions has to be boring?",
-    },
-    {
-      id: 20,
-      title: "ElexirPharma",
-      subtitle: "CAMPAIGN",
-      vimeoUrl: "https://vimeo.com/1131362727",
-      bunnyUrl: "/work-video/k1.mp4", 
-      category: "",
-      brandImage: "/profeel.png",
-      content: "Elexir Pharma reached out to us after discovering our work on LinkedIn. They were about to launch a new line of products within sports nutrition and needed a campaign that could introduce the brand to a wider audience on a new market. We developed a simple, yet strong concept built around the idea that their products fit people of all ages and lifestyles, from everyday moments to active routines. A relatable, uplifting and inclusive campaign that reflects the brand’s core values.",
-    },
-    {
-      id: 21,
-      title: "Bernadotte Kylberg",
-      subtitle: "PRODUCT RELEASE",
-      vimeoUrl: "https://vimeo.com/873664047",
-      bunnyUrl: "/work-video/k7.mp4", 
-      category: "",
-      brandImage: "/profeel.png",
-      content: "When the prince himself reaches out, you know you're doing something right. Bernadotte & Kylberg is a brand that breathes luxury and soft elegance, and every detail of this production had to match that. A 15 - second product film with a custom - made soundtrack, slow motion that drips with quality, and a striking model to tie it all together. Short format, but nothing short of beautiful.",
-    },
-    {
-      id: 22,
-      title: "SPENDWISE",
-      subtitle: "CAMPAIGN",
-      vimeoUrl: "https://vimeo.com/658921053",
-      bunnyUrl: "/work-video/k2.mp4",
-      category: "",
-      brandImage: "/profeel.png",
-      content: "Spendwise was a brand new name that needed a launch film nobody would forget. We were brought in through an agency looking for a production company that could think a little sideways. The idea? Rent a farm on Öland, bring in a VFX team, and create a cow with a literally dropping jaw. One day of shooting, full chaos, and a whole lot of fun. The kind of production that sounds insane in the brief and even better on screen.",
-    },
-    {
-      id: 23,
-      title: "IOFFICE",
-      subtitle: "CAMPAIGN",
-      vimeoUrl: "https://vimeo.com/873665732",
-      bunnyUrl: "/work-video/k3.mp4",
-      category: "",
-      brandImage: "/profeel.png",
-      content: "I office had grown into something big, but their brand hadn't quite kept up. A modern, forward - thinking coworking space that had never really stopped to tell its own story. We came in to change that. Over the course of a full year, we created a whole range of content, ad films for their app and tailored office services, alongside brand films that put the spotlight on their clients and the real experience of working at Ioffice. The kind of full delivery that lets a brand finally look the part.",
-      campaignStills: [
-        "/work/_DSC0565_1_11zon.jpg",
-        "/work/_DSC0650_2_11zon.jpg",
-        "/work/DSC03090_3_11zon.jpg",
-        "/work/DSC03392_4_11zon.jpg",
-        "/work/DSC03456_5_11zon.jpg",
-        "/work/DSC03481_6_11zon.jpg",
-      ],  
-    },
-    {
-      id: 24,
-      title: "Siox",
-      subtitle: "PRODUCT RELEASE",
-      vimeoUrl: "https://vimeo.com/707813847",
-      bunnyUrl: "/work-video/k4.mp4",
-      category: "",
-      brandImage: "/work/logos/SiooX-Logo.png",
-      content: "Sioo Woodprotection makes a product built to take a beating. Snow, ice, rain, sun. Whatever nature throws at wood, Sioo handles it. The brief was simple: show what the wood can withstand, and make sure there's a robot in it. So we rented an abandoned warehouse, called a friend who works with robotics, and let things unfold from there. Sometimes the best productions start with one weird idea and a contact in your phone.",
-      campaignStills: [
-        "/work/Offline-Selection-WoodLab-01.00_01_47_00.png",
-        "/work/Offline-Selection-WoodLab-01.00_01_37_04.png",
-        "/work/Offline-Selection-WoodLab-01.00_01_38_09.png",
-        "/work/Offline-Selection-WoodLab-01.00_01_41_00.png",
-        "/work/Offline-Selection-WoodLab-01.00_01_41_23.png",
-        "/work/Offline-Selection-WoodLab-01.00_01_44_11.png",
-      ],  
-    },
-    {
-      id: 25,
-      title: "LeKebab",
-      subtitle: "PRODUCT VIDEO",
-      vimeoUrl: "https://vimeo.com/1147273205",
-      bunnyUrl: "/work-video/k5.mp4",
-      category: "",
-      brandImage: "/work/logos/Le-Kebab-Logo.png",
-      content: "Stockholm's best kebab. Possibly Sweden's best kebab. We'll let you decide. We're still early in this partnership but already deep into something good. As their extended marketing department we run ongoing productions that keep the brand moving. And on top of that, a steady stream of content built around one simple goal: making you hungry. It's working.",
-      additionalContent: [
-        {
-          vimeoUrl: "https://vimeo.com/1172104235",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1172104212",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/1172104222",
-        },
-      ],
-    },
-    {
-      id: 26,
-      title: "LowCaly",
-      subtitle: "PRODUCT VIDEO",
-      vimeoUrl: "https://vimeo.com/926235618",
-      bunnyUrl: "/work-video/k6.mp4",
-      category: "",
-      brandImage: "/profeel.png",
-      content: "LowCaly is one of those clients that keeps things interesting. A partnership built over a couple of years and a track record of letting us do work we're proud of. This time around we got to support a new product launch, producing a campaign video alongside a set of OOH ads that ended up performing really well on social media. The kind of project where everything just clicks.",
-      additionalContent: [
-        {
-          vimeoUrl: "https://vimeo.com/1008719515",
-        },
-        {
-          vimeoUrl: "https://vimeo.com/926311979",
-        },
-      ],
-    },
-  ],
-  photography: [  
+  {
+    "id": 1,
+    "title": "Her Lost Dimension",
+    "subtitle": "An Official AI Trailer",
+    "youtubeUrl": "https://youtu.be/ZFDza4vosfw?si=UoKRkVC9lbLuwbD9",
+    "brandImage": "/work/logos/Stiga.png"
+  },
+  {
+    "id": 2,
+    "title": "Seedhe Maut x Jameson",
+    "subtitle": "Official Video",
+    "content": "A Retro Tale sells high fashion, second hand. To make that work, the brand needs to feel as good as the products. They came to us needing a film that captured the process, the care, and the culture behind what they do. Without it feeling like an ad. That's the brief we love.",
+    "youtubeUrl": "https://youtu.be/961gUBGjj7k?si=L1K90-Zr9EIaYcvT",
+    "brandImage": "/work/logos/A-Retro-Tale-Logo.png",
+    "additionalContent": [
+      {
+        "vimeoUrl": "https://vimeo.com/1172128959"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/1172129009"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/1172128987"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Salvador Dalí's \"Melting Clocks\"",
+    "subtitle": "Reimagined by AI",
+    "content": "PROfeel were launching something genuinely new. A protein drink that needs no refrigeration, and they wanted the world to know it in the most unexpected way possible. No safe product video. They wanted weird, fun, and impossible to ignore. After a lot of p lanning and a lot of ideas thrown at the wall, we landed on something we're pretty proud of.",
+    "youtubeUrl": "https://youtu.be/B9w3DvWAzqw?si=xj73voAYc4483gEc",
+    "brandImage": "/work/logos/PROfeelR_logo_white_RGB.png",
+    "campaignStills": [
+      "/work/work-3-1.jpg",
+      "/work/work-3-2.jpg",
+      "/work/work-3-3.jpg",
+      "/work/work-3-4.jpg",
+      "/work/work-3-5.jpg",
+      "/work/work-3-5-6.jpg",
+      "/work/work-3-5-7.webp"
+    ],
+    "additionalContent": [
+      {
+        "vimeoUrl": "https://vimeo.com/1172132281"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/1172132294"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/1172132266"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Silver & Shattered Glass",
+    "subtitle": "100% AI-Generated Jewellery Film",
+    "content": "NIUT is on a mission to remove the taboo around pleasure. A brand built by women, for women, with a simple message: enjoying yourself is something worth celebrating. We've had the pleasure of producing all kinds of creative content for them along the way. Most recently a full campaign with a strong nod to Sex and the City that was as fun to make as it looks on screen. Charming, bold, and completely unapologetic. Exactly how it should be.",
+    "youtubeUrl": "https://youtu.be/fwrFiyg4kag?si=PUXKu1sUrFYrIMpJ",
+    "brandImage": "/work/logos/Niut-Logo-Yellow.png",
+    "additionalContent": [
+      {
+        "vimeoUrl": "https://vimeo.com/1094033057"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/1094033031"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/1094033007"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "The Blue Brilliance",
+    "subtitle": "100% AI-Generated Luxury Product Film",
+    "content": "SushiYama came to us to find their unique voice in their communication. We put together a solid content package focused on branding. This engaging video shows off their innovative spirit, commitment to quality, and the fresh, vibrant vibe that sets them apart in the sushi world. From a standout branding film to eye - catching ads and lively 2D animations, we've got Sushiyama covered!",
+    "youtubeUrl": "https://youtu.be/NyCpH3HaOa0?si=Z72TAAD7bm-TYhWu",
+    "brandImage": "/work/logos/Sushi-Yama.png",
+    "campaignStills": [
+      "/work/AR507097_7_11zon.jpg",
+      "/work/AR507844_5_11zon.jpg",
+      "/work/AR507862_2_11zon.jpg",
+      "/work/AR508384_6_11zon.jpg",
+      "/work/AR508458_4_11zon.jpg",
+      "/work/AR508492_3_11zon.jpg",
+      "/work/AR509396_8_11zon.jpg",
+      "/work/magnific-gXCwT9rrbvX06bo0ml3z-Untitled_1.35_1_11zon.jpg"
+    ],
+    "additionalContent": [
+      {
+        "vimeoUrl": "https://vimeo.com/1172205673"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/1172205650"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/1172205600"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/1172204781"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Floral Reverie",
+    "subtitle": "A Night of Timeless Elegance",
+    "content": "MWhat started as a random meeting request turned into one of our most exciting partnerships. PROfeel keeps us on our toes with always - on productions every quarter, alongside larger international campaigns spanning TV, OOH, and beyond. They push us to grow, experiment, and constantly raise the bar. The kind of client that makes you better at what you do.",
+    "youtubeUrl": "https://youtu.be/WlVwerY8Jo8?si=6BId3ycRTVhyjhLH",
+    "brandImage": "/work/logos/PROfeelR_logo_white_RGB.png",
+    "campaignStills": [
+      "/work/profeel1.jpg",
+      "/work/profeel2.jpg",
+      "/work/profeel3.jpg",
+      "/work/profeel4.jpg",
+      "/work/profeel5.jpg",
+      "/work/profeel6.jpg",
+      "/work/profeel7.jpg",
+      "/work/profeel8.jpg",
+      "/work/profeel9.jpg"
+    ],
+    "additionalContent": [
+      {
+        "vimeoUrl": "https://vimeo.com/1172467057"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/1172467062"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/1172467014"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/1172466997"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Neon Nights",
+    "subtitle": "A Raw AI Fashion Experience",
+    "content": "We were brought in by another agency to produce a campaign for Länsförsäkringar, centered around rebates and sustainability. On paper that might not sound like the most glamorous brief. But this one turned out to be something special. A genuine message, beautiful locations, and a cast of people that made every shoot day a pleasure. The kind of production where you're actually proud of what you're putting out into the world. Good work for a good cause. We love to see it.",
+    "youtubeUrl": "https://youtu.be/waXwaZvHN70?si=FGZ_McrTeR5Bh9Mh",
+    "brandImage": "/profeel.png",
+    "additionalContent": [
+      {
+        "vimeoUrl": "https://vimeo.com/1172468762"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/1172468775"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "From Chaos to Calm",
+    "subtitle": "A boAt Cinematic Universe",
+    "content": "We love working with food. Like, really love it. So when Senstreet came to us needing a set of short ads to showcase their menu, the feeling, and just how easy it is to order, we were all in from day one. The result was a series of clips that made people hungry in the best possible way. And as a fun side note, a BTS moment from this very shoot ended up becoming our most viewed clip on Instagram to date. Go check it out.",
+    "youtubeUrl": "https://youtu.be/E3ZJM3MM-YM?si=SVMNWzm0zKeWVsvu",
+    "brandImage": "/profeel.png",
+    "additionalContent": [
+      {
+        "vimeoUrl": "https://vimeo.com/672659559"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/672659876"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "title": "The Roots That Raise Us",
+    "subtitle": "A Tribute to the Indian Farmer",
+    "content": "PrimusSilva needed content fast for their new running vest. Full reflective material, built for the night. We didn't overthink it. We took the gear, hit the streets of Stockholm late one evening, and let the city become the studio. Run and gun, no fuss. The reflective material came alive under the city lights in a way no controlled set could ever replicate. The result was a slick, high - energy edit that let the vest speak for itself, cut into multiple versions and ready to go.",
+    "youtubeUrl": "https://youtu.be/FSzcs_UsKb4?si=ydIq_1q1pCYX844n",
+    "brandImage": "/work/logos/Primus.png",
+    "campaignStills": [
+      "/work/01_SILVA_REFLECTIVE_VEST_3_11zon.jpg",
+      "/work/02_SILVA_REFLECTIVE_VEST_2_11zon.jpg",
+      "/work/03_SILVA_REFLECTIVE_VEST_1_11zon.jpg",
+      "/work/04_SILVA_REFLECTIVE_VEST_6_11zon.jpg",
+      "/work/05_SILVA_REFLECTIVE_VEST_4_11zon.jpg",
+      "/work/06_SILVA_REFLECTIVE_VEST_5_11zon.jpg"
+    ],
+    "additionalContent": [
+      {
+        "vimeoUrl": "http://vimeo.com/1172201579"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/1172201545"
+      },
+      {
+        "vimeoUrl": "https://vimeo.com/1172201512"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Freedom Looks Like This",
+    "subtitle": "100% AI-Generated Fashion Film",
+    "content": "When Aimo approached us to create their demo film, we saw an opportunity to break away from the traditional format of a talking head video. Instead of the CEO delivering a message straight to the camera, we pushed the boundaries and created somethin entirely unique. By blending dynamic 3D and VFX elements with visually stunning live - action scenes, we crafted an informative yet captivating film that truly stands out. The result? A powerful, engaging demo video that not only communicates Aimo’s vision but also leaves a lasting impression.",
+    "youtubeUrl": "https://youtu.be/aFNPXc-dAxM?si=BKgbhst8Vo8Lsj4_",
+    "brandImage": "/works/logos/Aimo.png"
+  },
+  {
+    "id": 11,
+    "title": "DEPEND",
+    "subtitle": "CAMPAIGN",
+    "category": "",
+    "thumbnail": "/video-11.jpg",
+    "vimeoUrl": "https://vimeo.com/1172194756",
+    "brandImage": "/work/logos/Depend-logo.png",
+    "content": "We've worked with Depend for years, but this time we wanted to raise the bar. Their O2 Care series, built around healthier nails and cuticles, deserved more than a straightforward product push. It needed to feel real, warm, and relevant to everyday women. So, we created a soft, living film that shows exactly when and how their nail oil fits into life. The kind of content that doesn't feel like an ad, even when it is one.",
+    "campaignStills": [
+      "/work/AR500020_2_11zon.jpg",
+      "/work/AR500118---_5_11zon.jpg",
+      "/work/AR500128_3_11zon.jpg",
+      "/work/AR500143_4_11zon.jpg",
+      "/work/AR500195_1_11zon.jpg"
+    ]
+  },
+  {
+    "id": 12,
+    "title": "AIMO",
+    "subtitle": "Sketches",
+    "category": "",
+    "vimeoUrl": "https://vimeo.com/1172142423",
+    "brandImage": "/works/logos/Aimo.png",
+    "content": "Aimo approached us with a unique request: to create a series of comedic sketches that would communicate their key messages in a lighthearted and engaging way. They wanted to tackle their pain points head-on but do so with humor and creativity, steering clear of traditional approaches."
+  },
+  {
+    "id": 13,
+    "title": "BALCK COFFE",
+    "subtitle": "DOCUMENTERY",
+    "category": "",
+    "vimeoUrl": "https://vimeo.com/392218352",
+    "brandImage": "/profeel.png",
+    "content": "Our first ever client. And still the most ambitious thing we've ever made. We traveled deep into the rainforests of Ethiopia to document the world behind the coffee we drink every day. The farmers, the land, the process. And how Balck, through honest and fair trade, is quietly making that world a little better. Some projects you just don't forget.",
+    "campaignStills": [
+      "/work/A7306348_1_11zon.jpg",
+      "/work/A7306400-2_4_11zon.jpg",
+      "/work/A7306415-2_5_11zon.jpg",
+      "/work/A7306437_8_11zon.jpg",
+      "/work/A7306474_7_11zon.jpg",
+      "/work/DSC00329_6_11zon.jpg",
+      "/work/DSC00525_3_11zon.jpg",
+      "/work/DSC00994_2_11zon.jpg"
+    ]
+  },
+  {
+    "id": 14,
+    "title": "INSURELLO",
+    "subtitle": "TV SPOT",
+    "category": "",
+    "vimeoUrl": "https://vimeo.com/994994366",
+    "brandImage": "/work/logos/Insurell.png",
+    "content": "We've been working with Insurello for several years, focusing on sales-driven ads. This time, we got the chance to create a TV commercial that emphasizes their brand with humor and relatable situations, but with a twist.",
+    "campaignStills": [
+      "/work/AR507960-1_5_11zon.jpg",
+      "/work/AR507991-1_6_11zon.jpg",
+      "/work/AR508087-1_3_11zon.jpg",
+      "/work/AR508310-1_4_11zon.jpg",
+      "/work/AR508830-1_2_11zon.jpg",
+      "/work/AR509086-1_1_11zon.jpg",
+      "/work/AR509190_7_11zon.jpg"
+    ]
+  },
+  {
+    "id": 15,
+    "title": "FOODORA",
+    "subtitle": "BRANDFILM",
+    "category": "",
+    "vimeoUrl": "https://vimeo.com/873665223",
+    "brandImage": "/work/logos/Foodora-Logo-Cherry-Pink.png",
+    "content": "Foodora didn't come to us for another ad. They needed something different. A film to strengthen their employer brand and give their office culture a real identity, the kind that makes people want to be part of something. We created a brand film built for recruitment, that didn't feel like a recruitment film. Just an honest look at who they actually are."
+  }
+],
+  photography: [
     {
       id: 1,
       title: "FALL WINS",
