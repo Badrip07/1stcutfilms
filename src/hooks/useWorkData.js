@@ -1,10 +1,32 @@
 import { useEffect, useRef, useState } from "react";
-import { apiUrl } from "../lib/apiBase.js";
+import { apiUrl, getApiBase } from "../lib/apiBase.js";
 import { workData as staticWorkData } from "../Pages/Work/workData.js";
 
 /** Successful GET /api/public/work only — never the bundled fallback. */
 let apiWorkDataCache = null;
 let inFlight = null;
+
+function wantsForcedStaticWork() {
+  const v = import.meta.env.VITE_USE_STATIC_WORK;
+  return v === "1" || v === "true" || v === "yes";
+}
+
+/**
+ * Vercel SPA rewrites send /api/* to index.html (200 + HTML). Without a real API
+ * origin (VITE_API_URL), fetches are useless and may briefly confuse the app.
+ */
+function shouldSkipApiFetchInThisBuild() {
+  if (wantsForcedStaticWork()) return true;
+  if (import.meta.env.DEV) return false;
+  return !getApiBase();
+}
+
+function isValidWorkApiPayload(data) {
+  if (!data || typeof data !== "object") return false;
+  if (!Array.isArray(data.video)) return false;
+  if (!Array.isArray(data.photography)) return false;
+  return true;
+}
 
 export function clearWorkDataCache() {
   apiWorkDataCache = null;
@@ -44,11 +66,25 @@ export function useWorkData() {
 
       setLoading(true);
 
+      if (shouldSkipApiFetchInThisBuild()) {
+        if (!cancelled) {
+          setWorkData(staticWorkData);
+          setSourceTracked("static");
+          setError(null);
+        }
+        setLoading(false);
+        return;
+      }
+
       if (!inFlight) {
         inFlight = fetch(apiUrl("/api/public/work"), { cache: "no-store" }).then(
           async (res) => {
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            return res.json();
+            const json = await res.json();
+            if (!isValidWorkApiPayload(json)) {
+              throw new Error("Invalid work API payload");
+            }
+            return json;
           }
         );
       }
