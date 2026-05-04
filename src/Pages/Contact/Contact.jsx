@@ -13,20 +13,11 @@ import { contactContentDefaults } from "./contactContentDefaults.js";
 /* ✅ CONTACT FORM COMPONENT */
 const ContactForm = ({ content }) => {
   const [formData, setFormData] = useState(content.form.initialValues);
-  const services = content.form.services;
+  const sessionTypes = content.form.sessionTypes;
 
   useEffect(() => {
     setFormData(content.form.initialValues);
   }, [content.form.initialValues]);
-
-  const handleServiceChange = (service) => {
-    setFormData((prev) => ({
-      ...prev,
-      services: prev.services.includes(service)
-        ? prev.services.filter((s) => s !== service)
-        : [...prev.services, service],
-    }));
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -44,32 +35,6 @@ const ContactForm = ({ content }) => {
 
   return (
     <form className={styles.contactForm} onSubmit={handleSubmit}>
-      {/* WHAT DO YOU NEED HELP WITH? */}
-      <div className={styles.formSection}>
-        <h3 className={styles.formSectionTitle}>
-          {content.form.sections.services.title.replace(
-            content.form.sections.services.highlight,
-            ""
-          )}{" "}
-          <span className={styles.formSectionTitleHighlight}>
-            {content.form.sections.services.highlight}
-          </span>
-        </h3>
-        <div className={styles.servicesGrid}>
-          {services.map((service) => (
-            <label key={service} className={styles.serviceCheckbox}>
-              <input
-                type="checkbox"
-                checked={formData.services.includes(service)}
-                onChange={() => handleServiceChange(service)}
-                className={styles.checkboxInput}
-              />
-              <span className={styles.checkboxLabel}>{service}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
       {/* YOUR INFORMATION */}
       <div className={styles.formSection}>
         <h3 className={styles.formSectionTitle}>
@@ -115,6 +80,33 @@ const ContactForm = ({ content }) => {
               required
             />
           </div>
+        </div>
+
+        {/* Session type — directly after phone */}
+        <h3 className={`${styles.formSectionTitle} ${styles.sessionSectionTitle}`}>
+          {content.form.sections.session.title.replace(
+            content.form.sections.session.highlight,
+            ""
+          )}{" "}
+          <span className={styles.formSectionTitleHighlight}>
+            {content.form.sections.session.highlight}
+          </span>
+        </h3>
+        <div className={styles.sessionTypeRow} role="radiogroup" aria-label={content.form.sections.session.title}>
+          {sessionTypes.map((option) => (
+            <label key={option} className={styles.sessionRadioLabel}>
+              <input
+                type="radio"
+                name="sessionType"
+                value={option}
+                checked={formData.sessionType === option}
+                onChange={handleInputChange}
+                className={styles.sessionRadioInput}
+                required
+              />
+              <span className={styles.sessionRadioText}>{option}</span>
+            </label>
+          ))}
         </div>
       </div>
 
@@ -181,9 +173,9 @@ const Contact = () => {
         sections: {
           ...contactContentDefaults.form.sections,
           ...(fromCms.form?.sections || {}),
-          services: {
-            ...contactContentDefaults.form.sections.services,
-            ...(fromCms.form?.sections?.services || {}),
+          session: {
+            ...contactContentDefaults.form.sections.session,
+            ...(fromCms.form?.sections?.session || {}),
           },
           info: {
             ...contactContentDefaults.form.sections.info,
@@ -198,12 +190,15 @@ const Contact = () => {
           ...contactContentDefaults.form.labels,
           ...(fromCms.form?.labels || {}),
         },
-        services: Array.isArray(fromCms.form?.services)
-          ? fromCms.form.services
-          : contactContentDefaults.form.services,
+        sessionTypes: Array.isArray(fromCms.form?.sessionTypes) && fromCms.form.sessionTypes.length
+          ? fromCms.form.sessionTypes
+          : contactContentDefaults.form.sessionTypes,
         initialValues: {
           ...contactContentDefaults.form.initialValues,
           ...(fromCms.form?.initialValues || {}),
+          sessionType:
+            fromCms.form?.initialValues?.sessionType ??
+            contactContentDefaults.form.initialValues.sessionType,
         },
       },
       teamMembers: Array.isArray(fromCms.teamMembers)
@@ -501,49 +496,7 @@ const Contact = () => {
       {/* WE DO AI PRODUCTIONS MARQUEE SECTION */}
       <MarqueeSection content={contactContent} />
 
-      <section
-        className={styles.whereToFind}>
-        <div className={styles.container}>
-           <h1 className={styles.heroTitle} data-animate="fade-up">
-                {contactContent.location.title}
-              </h1>
-            <div className={styles.addressBox} data-animate="fade-up">
-              <span>{contactContent.location.address}</span>
-            </div>
-        </div>
-        
-      </section>  
-
-      {/* MEET THE TEAM SECTION */}
-      <section
-        ref={contactTeamSectionRef}
-        className={styles.selectedSection}
-        id="team"
-        data-animate="fade-up"
-      >
-        <div className={styles.selectedContainer} >
-          <div className={styles.selectedHeader}>
-            <div className={styles.selectedTextWrapper}>
-              <h2 className={styles.selectedTitle} data-animate="fade-up">
-                {contactContent.teamSection.title
-                  .replace(contactContent.teamSection.highlight, "")
-                  .trim()}{" "}
-                <span className={styles.selectedTitleHighlight}>
-                  {contactContent.teamSection.highlight}
-                </span>
-                <div className={styles.decorativeLine}></div>
-              </h2>
-
-              <p className={styles.selectedDescription} data-animate="fade-up">
-                {contactContent.teamSection.description}
-              </p>
-            </div>
-          </div>
-
-          <TeamMembersGrid teamMembers={teamMembers}/>
-        </div>
-      </section>
-
+      {/* Start project + form */}
       <section
         ref={contactProjectSectionRef}
         className={`${styles.startProjectSection} ${
@@ -596,6 +549,36 @@ const Contact = () => {
 
          <ContactForm content={contactContent} />
        </section>
+
+      {/* MEET THE TEAM SECTION (moved below form) */}
+      <section
+        ref={contactTeamSectionRef}
+        className={styles.selectedSection}
+        id="team"
+        data-animate="fade-up"
+      >
+        <div className={styles.selectedContainer} >
+          <div className={styles.selectedHeader}>
+            <div className={styles.selectedTextWrapper}>
+              <h2 className={styles.selectedTitle} data-animate="fade-up">
+                {contactContent.teamSection.title
+                  .replace(contactContent.teamSection.highlight, "")
+                  .trim()}{" "}
+                <span className={styles.selectedTitleHighlight}>
+                  {contactContent.teamSection.highlight}
+                </span>
+                <div className={styles.decorativeLine}></div>
+              </h2>
+
+              <p className={styles.selectedDescription} data-animate="fade-up">
+                {contactContent.teamSection.description}
+              </p>
+            </div>
+          </div>
+
+          <TeamMembersGrid teamMembers={teamMembers}/>
+        </div>
+      </section>
 
 
       {/* POPUP VIDEO PLAYER FOR SELECTED WORKS */}

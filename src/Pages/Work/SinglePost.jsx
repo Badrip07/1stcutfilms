@@ -7,6 +7,12 @@ import Footer from "../../Components/footer/Footer";
 import styles from "./SinglePost.module.css";
 import { workData as staticWorkData } from "./workData";
 import { useWorkData } from "../../hooks/useWorkData.js";
+import {
+  getYoutubeIdFromUrl,
+  getYoutubeThumbnailUrl,
+  getYoutubeEmbedSrcWithControls,
+  getYoutubeEmbedSrcBackground,
+} from "../../lib/youtube.js";
 
 // Simple cache for Vimeo thumbnails on this page
 const vimeoThumbCache = new Map();
@@ -77,6 +83,20 @@ const VimeoThumbnail = ({ vimeoUrl, alt, className, style }) => {
     <img
       src={src}
       alt={alt}
+      className={className}
+      style={style}
+      loading="lazy"
+      decoding="async"
+    />
+  );
+};
+
+const YouTubeThumbnail = ({ videoId, alt, className, style }) => {
+  if (!videoId) return null;
+  return (
+    <img
+      src={getYoutubeThumbnailUrl(videoId)}
+      alt={alt || ""}
       className={className}
       style={style}
       loading="lazy"
@@ -334,8 +354,14 @@ const SinglePost = ({ videoMode = "vimeo", baseRoute = "/work" } = {}) => {
 
   const bunnyMainUrl =
     post.bunnyUrl || post.bunnyPlaybackUrl || post.bunnyVideoUrl || null;
+  const mainYoutubeId = getYoutubeIdFromUrl(
+    typeof post.youtubeUrl === "string" ? post.youtubeUrl : ""
+  );
   const isVideo =
-    post.video !== undefined || post.vimeoUrl !== undefined || bunnyMainUrl !== null;
+    post.video !== undefined ||
+    post.vimeoUrl !== undefined ||
+    Boolean(mainYoutubeId) ||
+    bunnyMainUrl !== null;
   const category = location.state?.category || "video";
 
   // Resolve main campaign film Vimeo URL (or fallback to direct video src)
@@ -346,6 +372,9 @@ const SinglePost = ({ videoMode = "vimeo", baseRoute = "/work" } = {}) => {
       ? rawMainVideo
       : null);
   const mainVimeoId = mainVimeoUrl ? getVimeoIdFromUrl(mainVimeoUrl) : null;
+  const useBunnyMain = videoMode === "bunny" && bunnyMainUrl;
+  const useYoutubeMain = !useBunnyMain && Boolean(mainYoutubeId);
+  const useVimeoMain = !useBunnyMain && !useYoutubeMain && Boolean(mainVimeoId);
 
   return (
     <div className={styles.singlePostPage}>
@@ -400,7 +429,13 @@ const SinglePost = ({ videoMode = "vimeo", baseRoute = "/work" } = {}) => {
 
                   {!isVideoPlaying ? (
                     <div className={styles.videoThumbnailContainer}>
-                      {mainVimeoUrl ? (
+                      {useYoutubeMain ? (
+                        <YouTubeThumbnail
+                          videoId={mainYoutubeId}
+                          alt={post.title}
+                          className={styles.videoThumbnail}
+                        />
+                      ) : mainVimeoUrl ? (
                         <VimeoThumbnail
                           vimeoUrl={mainVimeoUrl}
                           alt={post.title}
@@ -427,13 +462,22 @@ const SinglePost = ({ videoMode = "vimeo", baseRoute = "/work" } = {}) => {
                       </button>
                     </div>
                   ) : null}
-                  {videoMode === "bunny" && bunnyMainUrl ? (
+                  {useBunnyMain ? (
                     <video
                       ref={videoRef}
                       src={bunnyMainUrl}
                       controls
                       playsInline
                       className={styles.mainVideo}
+                      style={{ display: isVideoPlaying ? "block" : "none" }}
+                    />
+                  ) : useYoutubeMain ? (
+                    <iframe
+                      src={getYoutubeEmbedSrcWithControls(mainYoutubeId)}
+                      className={styles.mainVideo}
+                      title={post.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
                       style={{ display: isVideoPlaying ? "block" : "none" }}
                     />
                   ) : mainVimeoId ? (
@@ -515,135 +559,133 @@ const SinglePost = ({ videoMode = "vimeo", baseRoute = "/work" } = {}) => {
                   </h2>
                 </div>
                     <div className={styles.contentGrid}>
-                      {post.additionalContent.map((item, index) => (
+                      {post.additionalContent.map((item, index) => {
+                        const itemVimeoUrl =
+                          item.vimeoUrl ||
+                          (item.video && String(item.video).includes("vimeo.com")
+                            ? item.video
+                            : null);
+                        const itemVimeoId = itemVimeoUrl
+                          ? getVimeoIdFromUrl(itemVimeoUrl)
+                          : null;
+                        const itemYoutubeId = getYoutubeIdFromUrl(
+                          String(item.youtubeUrl || "")
+                        );
+                        const itemBunnyUrl =
+                          item.bunnyUrl ||
+                          item.bunnyPlaybackUrl ||
+                          item.bunnyVideoUrl ||
+                          null;
+                        const useBunnyItem = videoMode === "bunny" && itemBunnyUrl;
+                        const useYoutubeItem = !useBunnyItem && Boolean(itemYoutubeId);
+                        const useVimeoItem =
+                          !useBunnyItem && !useYoutubeItem && Boolean(itemVimeoId);
+                        const hasEmbedPlayer = useYoutubeItem || useVimeoItem;
+                        const hasInlineVideo =
+                          (videoMode === "bunny" && Boolean(itemBunnyUrl)) ||
+                          !hasEmbedPlayer;
+
+                        return (
                         <div 
                           key={index} 
                           className={styles.contentItem}
                           data-animate="fade-up"
                           onMouseEnter={() =>
-                            handleContentMouseEnter(
-                              index,
-                              videoMode === "bunny"
-                                ? Boolean(
-                                    item.bunnyUrl ||
-                                      item.bunnyPlaybackUrl ||
-                                      item.bunnyVideoUrl
-                                  ) ||
-                                  !(item.vimeoUrl ||
-                                    (item.video &&
-                                      String(item.video).includes("vimeo.com")))
-                                : !(item.vimeoUrl || (item.video && String(item.video).includes("vimeo.com")))
-                            )
+                            handleContentMouseEnter(index, hasInlineVideo)
                           }
                           onMouseLeave={() =>
-                            handleContentMouseLeave(
-                              index,
-                              videoMode === "bunny"
-                                ? Boolean(
-                                    item.bunnyUrl ||
-                                      item.bunnyPlaybackUrl ||
-                                      item.bunnyVideoUrl
-                                  ) ||
-                                  !(item.vimeoUrl ||
-                                    (item.video &&
-                                      String(item.video).includes("vimeo.com")))
-                                : !(item.vimeoUrl || (item.video && String(item.video).includes("vimeo.com")))
-                            )
+                            handleContentMouseLeave(index, hasInlineVideo)
                           }
                         >
                           <div className={styles.contentThumbnail}>
-                            {(() => {
-                              const itemVimeoUrl =
-                                item.vimeoUrl ||
-                                (item.video && String(item.video).includes("vimeo.com")
-                                  ? item.video
-                                  : null);
-                              const itemVimeoId = itemVimeoUrl
-                                ? getVimeoIdFromUrl(itemVimeoUrl)
-                                : null;
-                              const itemBunnyUrl =
-                                item.bunnyUrl ||
-                                item.bunnyPlaybackUrl ||
-                                item.bunnyVideoUrl ||
-                                null;
-
-                              if (
-                                itemVimeoUrl &&
-                                itemVimeoId &&
-                                !(videoMode === "bunny" && itemBunnyUrl)
-                              ) {
-                                return (
-                                  <>
-                                    <VimeoThumbnail
-                                      vimeoUrl={itemVimeoUrl}
-                                      alt={item.title || `${post.title} - ${index + 1}`}
-                                      className={styles.videoThumbnail}
-                                      style={{
-                                        opacity: playingContentIndex === index ? 0 : 1,
-                                      }}
-                                    />
-                                    {playingContentIndex === index && (
-                                      <iframe
-                                        src={`https://player.vimeo.com/video/${itemVimeoId}?autoplay=1&muted=1&loop=1&controls=0`}
-                                        className={styles.contentVideo}
-                                        title={item.title || `${post.title} - ${index + 1}`}
-                                        allow="autoplay; fullscreen; picture-in-picture"
-                                        allowFullScreen
-                                        style={{ opacity: 1 }}
-                                      />
-                                    )}
-                                  </>
-                                );
-                              }
-
-                              // Fallback to original image + HTML5 video behavior
-                              return (
-                                <>
-                                  {itemVimeoUrl && itemVimeoId ? (
-                                    <VimeoThumbnail
-                                      vimeoUrl={itemVimeoUrl}
-                                      alt={item.title || `${post.title} - ${index + 1}`}
-                                      className={styles.videoThumbnail}
-                                      style={{
-                                        opacity:
-                                          playingContentIndex === index ? 0 : 1,
-                                      }}
-                                    />
-                                  ) : (
-                                    <img
-                                      src={
-                                        item.thumbnail ||
-                                        item.poster ||
-                                        item.src ||
-                                        item.image
-                                      }
-                                      alt={
-                                        item.title || `${post.title} - ${index + 1}`
-                                      }
-                                      style={{
-                                        opacity:
-                                          playingContentIndex === index ? 0 : 1,
-                                      }}
-                                    />
-                                  )}
-                                  <video
-                                    ref={(el) => {
-                                      if (el) contentVideoRefs.current[index] = el;
-                                    }}
-                                    src={
-                                      itemBunnyUrl || item.video || item.src
-                                    }
-                                    muted
-                                    loop
-                                    playsInline
+                            {useYoutubeItem ? (
+                              <>
+                                <YouTubeThumbnail
+                                  videoId={itemYoutubeId}
+                                  alt={item.title || `${post.title} - ${index + 1}`}
+                                  className={styles.videoThumbnail}
+                                  style={{
+                                    opacity: playingContentIndex === index ? 0 : 1,
+                                  }}
+                                />
+                                {playingContentIndex === index && (
+                                  <iframe
+                                    src={getYoutubeEmbedSrcBackground(itemYoutubeId)}
                                     className={styles.contentVideo}
+                                    title={item.title || `${post.title} - ${index + 1}`}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    style={{ opacity: 1 }}
+                                  />
+                                )}
+                              </>
+                            ) : useVimeoItem ? (
+                              <>
+                                <VimeoThumbnail
+                                  vimeoUrl={itemVimeoUrl}
+                                  alt={item.title || `${post.title} - ${index + 1}`}
+                                  className={styles.videoThumbnail}
+                                  style={{
+                                    opacity: playingContentIndex === index ? 0 : 1,
+                                  }}
+                                />
+                                {playingContentIndex === index && (
+                                  <iframe
+                                    src={`https://player.vimeo.com/video/${itemVimeoId}?autoplay=1&muted=1&loop=1&controls=0`}
+                                    className={styles.contentVideo}
+                                    title={item.title || `${post.title} - ${index + 1}`}
+                                    allow="autoplay; fullscreen; picture-in-picture"
+                                    allowFullScreen
+                                    style={{ opacity: 1 }}
+                                  />
+                                )}
+                              </>
+                            ) : (
+                              <>
+                                {itemVimeoUrl && itemVimeoId ? (
+                                  <VimeoThumbnail
+                                    vimeoUrl={itemVimeoUrl}
+                                    alt={item.title || `${post.title} - ${index + 1}`}
+                                    className={styles.videoThumbnail}
                                     style={{
-                                      opacity: playingContentIndex === index ? 1 : 0,
+                                      opacity:
+                                        playingContentIndex === index ? 0 : 1,
                                     }}
                                   />
-                                </>
-                              );
-                            })()}
+                                ) : (
+                                  <img
+                                    src={
+                                      item.thumbnail ||
+                                      item.poster ||
+                                      item.src ||
+                                      item.image
+                                    }
+                                    alt={
+                                      item.title || `${post.title} - ${index + 1}`
+                                    }
+                                    style={{
+                                      opacity:
+                                        playingContentIndex === index ? 0 : 1,
+                                    }}
+                                  />
+                                )}
+                                <video
+                                  ref={(el) => {
+                                    if (el) contentVideoRefs.current[index] = el;
+                                  }}
+                                  src={
+                                    itemBunnyUrl || item.video || item.src
+                                  }
+                                  muted
+                                  loop
+                                  playsInline
+                                  className={styles.contentVideo}
+                                  style={{
+                                    opacity: playingContentIndex === index ? 1 : 0,
+                                  }}
+                                />
+                              </>
+                            )}
                             {/* Visual play icon overlay (hover to play is handled by mouse events) */}
                             <button
                               type="button"
@@ -665,7 +707,8 @@ const SinglePost = ({ videoMode = "vimeo", baseRoute = "/work" } = {}) => {
                             </button>
                           </div>
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 </>

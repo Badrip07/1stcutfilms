@@ -2,6 +2,8 @@ import { Router } from "express";
 import { pool } from "../../db/pool.js";
 import { requireAuth } from "../../middleware/requireAuth.js";
 
+const ALLOWED_WORK_CATEGORIES = ["video", "photography"];
+
 export const adminWorkRouter = Router();
 adminWorkRouter.use(requireAuth);
 
@@ -47,7 +49,7 @@ adminWorkRouter.post("/", async (req, res) => {
     const legacy_numeric_id = Number.parseInt(req.body?.legacy_numeric_id, 10);
     const sort_order = Number.parseInt(req.body?.sort_order ?? 0, 10);
     const payload = req.body?.payload;
-    if (!["video", "photography", "3d", "ai"].includes(category)) {
+    if (!ALLOWED_WORK_CATEGORIES.includes(category)) {
       return res.status(400).json({ error: "Invalid category" });
     }
     if (Number.isNaN(legacy_numeric_id) || payload == null) {
@@ -76,6 +78,13 @@ adminWorkRouter.put("/:id", async (req, res) => {
     const legacy_numeric_id = req.body?.legacy_numeric_id;
     const sort_order = req.body?.sort_order;
     const payload = req.body?.payload;
+
+    if (category !== undefined) {
+      const catStr = String(category);
+      if (!ALLOWED_WORK_CATEGORIES.includes(catStr)) {
+        return res.status(400).json({ error: "Invalid category" });
+      }
+    }
 
     const fields = [];
     const values = [];

@@ -8,6 +8,7 @@ const emptyPayload = {
   category: "",
   content: "",
   vimeoUrl: "",
+  youtubeUrl: "",
   bunnyUrl: "",
   brandImage: "",
   image: "",
@@ -23,6 +24,7 @@ function normalizePayload(raw = {}) {
     category: String(raw.category || ""),
     content: String(raw.content || ""),
     vimeoUrl: String(raw.vimeoUrl || ""),
+    youtubeUrl: String(raw.youtubeUrl || ""),
     bunnyUrl: String(raw.bunnyUrl || ""),
     brandImage: String(raw.brandImage || ""),
     image: String(raw.image || ""),
@@ -34,8 +36,11 @@ function normalizePayload(raw = {}) {
       : [],
     additionalContent: Array.isArray(raw.additionalContent)
       ? raw.additionalContent
-          .map((item) => ({ vimeoUrl: String(item?.vimeoUrl || "") }))
-          .filter((item) => item.vimeoUrl)
+          .map((item) => ({
+            vimeoUrl: String(item?.vimeoUrl || ""),
+            youtubeUrl: String(item?.youtubeUrl || ""),
+          }))
+          .filter((item) => item.vimeoUrl || item.youtubeUrl)
       : [],
   };
 }
@@ -43,6 +48,14 @@ function normalizePayload(raw = {}) {
 function payloadToJson(payloadForm) {
   const next = { ...payloadForm };
   if (!next.additionalContent?.length) delete next.additionalContent;
+  else {
+    next.additionalContent = next.additionalContent.map((item) => {
+      const o = {};
+      if (item.vimeoUrl) o.vimeoUrl = item.vimeoUrl;
+      if (item.youtubeUrl) o.youtubeUrl = item.youtubeUrl;
+      return o;
+    });
+  }
   if (!next.campaignStills?.length) delete next.campaignStills;
   return next;
 }
@@ -158,34 +171,6 @@ export default function WorkEdit() {
       fd.append("file", file);
       const res = await api("/admin/media", { method: "POST", body: fd });
       updatePayload((p) => ({ ...p, [targetKey]: res.url || "" }));
-    } catch (e) {
-      setError(e.message || "Upload failed");
-    } finally {
-      setUploading(false);
-    }
-  }
-
-  async function pickAndUploadMp4Video() {
-    try {
-      setUploading(true);
-      setError("");
-      const picker = document.createElement("input");
-      picker.type = "file";
-      picker.accept = "video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov";
-      picker.click();
-      const file = await new Promise((resolve) => {
-        picker.onchange = () => resolve(picker.files?.[0] || null);
-      });
-      if (!file) return;
-      const mime = (file.type || "").toLowerCase();
-      if (mime && !mime.startsWith("video/")) {
-        setError("Please choose a video file (MP4, WebM, or MOV).");
-        return;
-      }
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await api("/admin/media", { method: "POST", body: fd });
-      updatePayload((p) => ({ ...p, bunnyUrl: res.url || "" }));
     } catch (e) {
       setError(e.message || "Upload failed");
     } finally {
@@ -345,8 +330,12 @@ export default function WorkEdit() {
             >
               <option value="video">video</option>
               <option value="photography">photography</option>
-              <option value="3d">3d</option>
-              <option value="ai">ai</option>
+              {category === "3d" ? (
+                <option value="3d">3d (change to video or photography to save)</option>
+              ) : null}
+              {category === "ai" ? (
+                <option value="ai">ai (change to video or photography to save)</option>
+              ) : null}
             </select>
           </div>
           <div className="col-md-4">
@@ -389,32 +378,19 @@ export default function WorkEdit() {
               onChange={(v) => updatePayload((p) => ({ ...p, subtitle: v }))}
             />
           </div>
-          <div className="col-md-6">
-            <Field
-              label="Vimeo URL"
-              value={payloadForm.vimeoUrl}
-              onChange={(v) => updatePayload((p) => ({ ...p, vimeoUrl: v }))}
-              placeholder="https://vimeo.com/..."
-            />
+          <div className="col-12">
+            <h3 className="h6 text-uppercase text-secondary mb-2">Campaign video</h3>
+            <p className="text-secondary small mb-3">
+              Paste a YouTube watch, embed, Shorts, or <code>youtu.be</code> link. To set Vimeo or a hosted MP4 instead, use the advanced JSON below.
+            </p>
           </div>
           <div className="col-md-6">
             <Field
-              label="Direct video URL (bunnyUrl)"
-              value={payloadForm.bunnyUrl}
-              onChange={(v) => updatePayload((p) => ({ ...p, bunnyUrl: v }))}
-              placeholder="/uploads/... or https://..."
+              label="YouTube URL"
+              value={payloadForm.youtubeUrl}
+              onChange={(v) => updatePayload((p) => ({ ...p, youtubeUrl: v }))}
+              placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/..."
             />
-            <button
-              type="button"
-              className="btn btn-sm btn-outline-secondary mt-2"
-              onClick={() => pickAndUploadMp4Video()}
-              disabled={uploading}
-            >
-              Upload MP4 / video
-            </button>
-            <div className="form-text">
-              Saves to <code>/uploads/</code> on the API server (same as images). Main site must be able to load that URL (use full API origin in production if needed).
-            </div>
           </div>
           <div className="col-md-6">
             <Field
@@ -518,9 +494,11 @@ export default function WorkEdit() {
           </div>
           <div className="col-12">
             <TextAreaField
-              label="Additional video URLs (one Vimeo URL per line)"
+              label="Additional clips (one URL per line — Vimeo or YouTube)"
               rows={4}
-              value={(payloadForm.additionalContent || []).map((item) => item.vimeoUrl).join("\n")}
+              value={(payloadForm.additionalContent || [])
+                .map((item) => item.youtubeUrl || item.vimeoUrl || "")
+                .join("\n")}
               onChange={(v) =>
                 updatePayload((p) => ({
                   ...p,
@@ -528,10 +506,14 @@ export default function WorkEdit() {
                     .split("\n")
                     .map((line) => line.trim())
                     .filter(Boolean)
-                    .map((url) => ({ vimeoUrl: url })),
+                    .map((line) =>
+                      /youtu\.be|youtube\.com/i.test(line)
+                        ? { youtubeUrl: line }
+                        : { vimeoUrl: line }
+                    ),
                 }))
               }
-              placeholder="https://vimeo.com/123456789"
+              placeholder="https://vimeo.com/... or https://www.youtube.com/watch?v=..."
             />
           </div>
         </div>

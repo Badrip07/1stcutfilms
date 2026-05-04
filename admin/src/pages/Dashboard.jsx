@@ -60,7 +60,7 @@ export default function Dashboard() {
       {err ? <div className="alert alert-danger">{err}</div> : null}
 
       <div className="row g-3 mt-2">
-        {["video", "photography", "3d", "ai"].map((cat) => (
+        {["video", "photography"].map((cat) => (
           <div key={cat} className="col-md-3">
             <div className="admin-card p-3 admin-stat-card">
               <div className="text-secondary text-uppercase small">{cat}</div>

@@ -15,9 +15,7 @@ const Navbar = () => {
     if (location.pathname === "/contact") return "contact";
     if (
       location.pathname === "/work" ||
-      location.pathname.startsWith("/work/") ||
-      location.pathname === "/work-copy" ||
-      location.pathname.startsWith("/work-copy/")
+      location.pathname.startsWith("/work/")
     )
       return "work";
     if (location.hash === "#work") return "work";

@@ -32,9 +32,9 @@ export const contactContentDefaults = {
   },
   form: {
     sections: {
-      services: {
-        title: "WHAT DO YOU NEED HELP WITH?",
-        highlight: "HELP WITH?",
+      session: {
+        title: "WHAT TYPE OF SESSION ARE YOU LOOKING FOR?",
+        highlight: "LOOKING FOR?",
       },
       info: {
         title: "YOUR INFORMATION",
@@ -51,16 +51,9 @@ export const contactContentDefaults = {
       phone: "PHONE",
       submit: "SUBMIT",
     },
-    services: [
-      "VIDEO PRODUCTION",
-      "PHOTOGRAPHY",
-      "AI CONTENT",
-      "3D/VFX",
-      "GRADING",
-      "OTHER",
-    ],
+    sessionTypes: ["Wedding", "Engagement", "Fashion", "Casual"],
     initialValues: {
-      services: [],
+      sessionType: "Wedding",
       name: "",
       email: "",
       phone: "",

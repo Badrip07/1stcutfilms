@@ -145,13 +145,25 @@ const Footer = () => {
             {/* SOCIAL */}
             <div className={styles.gridCell}>
               <div className={styles.socialCell}>
-                <a href="#" className={styles.socialLink} aria-label="Instagram (set URL in Footer.jsx)">
+                <a
+                  href="https://www.instagram.com/1stcut.ai/"
+                  className={styles.socialLink}
+                  aria-label="Instagram — 1stcut.ai"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   INSTAGRAM
                 </a>
                 <a href="#" className={styles.socialLink} aria-label="LinkedIn (set URL in Footer.jsx)">
                   LINKEDIN
                 </a>
-                <a href="#" className={styles.socialLink} aria-label="YouTube (set URL in Footer.jsx)">
+                <a
+                  href="https://www.youtube.com/@1stcutfilms/videos"
+                  className={styles.socialLink}
+                  aria-label="YouTube — 1stcutfilms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   YOUTUBE
                 </a>
               </div>

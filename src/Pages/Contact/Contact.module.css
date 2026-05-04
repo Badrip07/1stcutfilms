@@ -900,10 +900,15 @@ color: #000;
     top: -11rem;
     left: 48rem;
 }
-.startProjectSection .selectedHeader, .startProjectSection .selectedHeader .selectedTextWrapper{
-    justify-content: flex-start;
-    text-align: left;
-    align-items: flex-start;
+.startProjectSection .selectedHeader,
+.startProjectSection .selectedHeader .selectedTextWrapper {
+  justify-content: flex-start;
+  text-align: left;
+  align-items: flex-start;
+}
+
+.startProjectSection .selectedHeader {
+  margin-bottom: clamp(4.5rem, 8vw, 10rem);
 }
 .startProjectSection .selectedHeader .decorativeLine{
   width: 16rem;
@@ -920,7 +925,8 @@ color: #000;
     height: 30rem;
     opacity: 0.5;
 }
-.startProjectSection{
+.startProjectSection {
+  padding-top: clamp(5rem, 9vw, 11rem);
   padding-bottom: 20rem;
 }
 
@@ -1019,7 +1025,11 @@ color: #000;
   padding: 0 1.6rem;
   display: flex;
   flex-direction: column;
-  gap: clamp(4rem, 5vw, 6rem);
+  gap: clamp(4rem, 5vw, 4rem);
+}
+
+.startProjectSection .contactForm {
+  margin-top: clamp(8rem, 14vw, 18rem);
 }
 
 .formSection {
@@ -1044,6 +1054,47 @@ color: #000;
 
 .formSectionTitleHighlight {
   color: var(--accent-yellow, #f0f0f0);
+}
+
+.sessionSectionTitle {
+  margin-top: clamp(2.5rem, 4vw, 4.5rem);
+}
+
+/* Session type (radio row) */
+.sessionTypeRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  margin-top: 0.5rem;
+  padding-top: clamp(1rem, 2vw, 1.5rem);
+  border-top: 1px solid rgb(255 255 255 / 90%);
+}
+
+.sessionRadioLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  cursor: pointer;
+  user-select: none;
+  font-family: "Praktika Rounded", sans-serif;
+  font-size: clamp(1.4rem, 1.6vw, 2rem);
+  font-weight: 600;
+  color: #fff;
+}
+
+.sessionRadioInput {
+  width: clamp(1.65rem, 2.4vmin, 2.35rem);
+  height: clamp(1.65rem, 2.4vmin, 2.35rem);
+  min-width: 1.65rem;
+  min-height: 1.65rem;
+  flex-shrink: 0;
+  accent-color: #2dd4bf;
+  cursor: pointer;
+}
+
+.sessionRadioText {
+  letter-spacing: 0.02em;
 }
 
 /* SERVICES GRID */

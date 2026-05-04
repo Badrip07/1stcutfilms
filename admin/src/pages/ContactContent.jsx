@@ -33,7 +33,7 @@ function mergeWithDefaults(incoming) {
       sections: {
         ...base.form.sections,
         ...(src.form?.sections || {}),
-        services: { ...base.form.sections.services, ...(src.form?.sections?.services || {}) },
+        session: { ...base.form.sections.session, ...(src.form?.sections?.session || {}) },
         info: { ...base.form.sections.info, ...(src.form?.sections?.info || {}) },
         description: {
           ...base.form.sections.description,
@@ -41,7 +41,10 @@ function mergeWithDefaults(incoming) {
         },
       },
       labels: { ...base.form.labels, ...(src.form?.labels || {}) },
-      services: Array.isArray(src.form?.services) ? src.form.services : base.form.services,
+      sessionTypes:
+        Array.isArray(src.form?.sessionTypes) && src.form.sessionTypes.length
+          ? src.form.sessionTypes
+          : base.form.sessionTypes,
       initialValues: { ...base.form.initialValues, ...(src.form?.initialValues || {}) },
     },
     teamMembers: Array.isArray(src.teamMembers) ? src.teamMembers : base.teamMembers,
@@ -351,6 +354,56 @@ export default function ContactContent() {
             </button>
           </div>
         ))}
+      </div>
+
+      <div className="admin-card p-3 mb-3">
+        <h5 className="mb-2">Start project form (session type)</h5>
+        <Field
+          label="Session question — full title"
+          value={form.form.sections.session.title}
+          onChange={(v) =>
+            setForm((p) => ({
+              ...p,
+              form: {
+                ...p.form,
+                sections: {
+                  ...p.form.sections,
+                  session: { ...p.form.sections.session, title: v },
+                },
+              },
+            }))
+          }
+        />
+        <Field
+          label="Session question — highlight phrase (must appear inside full title)"
+          value={form.form.sections.session.highlight}
+          onChange={(v) =>
+            setForm((p) => ({
+              ...p,
+              form: {
+                ...p.form,
+                sections: {
+                  ...p.form.sections,
+                  session: { ...p.form.sections.session, highlight: v },
+                },
+              },
+            }))
+          }
+        />
+        <TextAreaField
+          label="Session type options (one per line)"
+          rows={4}
+          value={(form.form.sessionTypes || []).join("\n")}
+          onChange={(v) =>
+            setForm((p) => ({
+              ...p,
+              form: {
+                ...p.form,
+                sessionTypes: v.split("\n").map((s) => s.trim()).filter(Boolean),
+              },
+            }))
+          }
+        />
       </div>
 
       <div className="admin-card p-3 mb-3">

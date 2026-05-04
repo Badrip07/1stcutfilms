@@ -64,7 +64,7 @@ export default function WorkList() {
           <div className="col-lg-5">
             <label className="form-label mb-1">Category</label>
             <div className="d-flex flex-wrap gap-2">
-              {["all", "video", "photography", "3d", "ai"].map((cat) => (
+              {["all", "video", "photography"].map((cat) => (
                 <button
                   key={cat}
                   type="button"

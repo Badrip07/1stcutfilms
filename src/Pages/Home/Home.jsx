@@ -13,6 +13,11 @@ import { homeContentDefaults } from "./homeContentDefaults.js";
 import { apiUrl } from "../../lib/apiBase.js";
 import { workData as bundledWorkData } from "../Work/workData.js";
 import { useCoarseVideoLoading } from "../../hooks/useCoarseVideoLoading.js";
+import {
+  getYoutubeIdFromUrl,
+  getYoutubeThumbnailUrl,
+  getYoutubeEmbedSrcBackground,
+} from "../../lib/youtube.js";
 
 const resolveHomeAssetUrl = (url = "") => {
   if (typeof url !== "string") return url;
@@ -79,6 +84,75 @@ function LazyVimeoCasePlayer({ videoId, title, className, coarse, posterSrc }) {
           {posterSrc ? (
             <img
               src={posterSrc}
+              alt=""
+              className={styles.casePosterFull}
+              decoding="async"
+            />
+          ) : null}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** YouTube background embed for client case strip (same lazy pattern as Vimeo). */
+function LazyYoutubeCasePlayer({ videoId, title, className, coarse, posterSrc }) {
+  const hostRef = useRef(null);
+  const [ioReady, setIoReady] = useState(false);
+  const [tapped, setTapped] = useState(false);
+
+  useEffect(() => {
+    if (coarse) return;
+    const el = hostRef.current;
+    if (!el) return;
+    const ob = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) setIoReady(true);
+      },
+      { rootMargin: "120px", threshold: 0.06 }
+    );
+    ob.observe(el);
+    return () => ob.disconnect();
+  }, [coarse, videoId]);
+
+  const showIframe = coarse ? tapped : ioReady;
+  const src = showIframe ? getYoutubeEmbedSrcBackground(videoId) : undefined;
+  const thumb = posterSrc || getYoutubeThumbnailUrl(videoId);
+
+  return (
+    <div ref={hostRef} className={styles.caseVideoMediaHost}>
+      {showIframe ? (
+        <iframe
+          src={src}
+          className={className}
+          title={title || "YouTube video"}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      ) : coarse ? (
+        <button
+          type="button"
+          className={styles.caseVimeoPosterBtn}
+          onClick={() => setTapped(true)}
+          aria-label="Load and play video preview"
+        >
+          {thumb ? (
+            <img
+              src={thumb}
+              alt=""
+              className={styles.casePosterFull}
+              decoding="async"
+            />
+          ) : null}
+          <span className={styles.casePlayBadge} aria-hidden="true">
+            ▶
+          </span>
+        </button>
+      ) : (
+        <div className={styles.caseVimeoPlaceholder}>
+          {thumb ? (
+            <img
+              src={thumb}
               alt=""
               className={styles.casePosterFull}
               decoding="async"
@@ -1105,6 +1179,11 @@ const Home = () => {
                 }
               }
 
+              const youtubeStr =
+                typeof post.youtubeUrl === "string" ? post.youtubeUrl.trim() : "";
+              const youtubeId =
+                !hasDirectMp4 && youtubeStr ? getYoutubeIdFromUrl(youtubeStr) : null;
+
               const postTitle = config?.titleOverride || post.subtitle || post.category || post.title || "CREATIVE BRANDFILM";
               const postDescription =
                 config?.descriptionOverride ||
@@ -1120,6 +1199,14 @@ const Home = () => {
                     {vimeoId ? (
                       <LazyVimeoCasePlayer
                         videoId={vimeoId}
+                        title={post.title}
+                        className={styles.caseVideoPlayer}
+                        coarse={coarse}
+                        posterSrc={casePoster}
+                      />
+                    ) : youtubeId ? (
+                      <LazyYoutubeCasePlayer
+                        videoId={youtubeId}
                         title={post.title}
                         className={styles.caseVideoPlayer}
                         coarse={coarse}

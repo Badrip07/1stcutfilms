@@ -6,6 +6,11 @@ import GlassButton from "../../Components/GlassButton/GlassButton";
 import styles from "./Work.module.css";
 import { workData as staticWorkData } from "./workData";
 import { useWorkData } from "../../hooks/useWorkData.js";
+import {
+  getYoutubeIdFromUrl,
+  getYoutubeThumbnailUrl,
+  getYoutubeEmbedSrcBackground,
+} from "../../lib/youtube.js";
 
 // Cache Vimeo thumbnails so we don't refetch repeatedly
 const vimeoThumbCache = new Map();
@@ -85,6 +90,21 @@ const VimeoThumbnail = ({ vimeoUrl, alt, className, style }) => {
   );
 };
 
+const YouTubeThumbnail = ({ videoId, alt, className, style }) => {
+  if (!videoId) return null;
+  const src = getYoutubeThumbnailUrl(videoId);
+  return (
+    <img
+      src={src}
+      alt={alt || ""}
+      className={className}
+      style={style}
+      loading="lazy"
+      decoding="async"
+    />
+  );
+};
+
 const VimeoHoverVideo = () => {
   const [isHovered, setIsHovered] = useState(false);
   const vimeoId = "1172538823";
@@ -116,32 +136,7 @@ const VimeoHoverVideo = () => {
   );
 };
 
-const LOCAL_WORK_VIDEO_PATHS = [
-  "/work-video/247a4df2-44c5c0dd.mp4",
-  "/work-video/4c4d6c0f-16494b14.mp4",
-  "/work-video/68ce7dfd-4c2ae82e.mp4",
-  "/work-video/98d7c575-a1578499.mp4",
-  "/work-video/ca6a52e2-9d8be726.mp4",
-  "/work-video/d69adc86-a03cd9e4.mp4",
-  "/work-video/d7caaf32-bca914e9.mp4",
-  "/work-video/k1.mp4",
-  "/work-video/k2.mp4",
-  "/work-video/k3.mp4",
-  "/work-video/k4.mp4",
-  "/work-video/k5.mp4",
-  "/work-video/k6.mp4",
-  "/work-video/k7.mp4",
-  "/work-video/v5.mp4",
-  "/work-video/v6.mp4",
-  "/work-video/v7.mp4",
-  "/work-video/v8.mp4",
-  "/work-video/v9.mp4",
-  "/work-video/v10.mp4",
-  "/work-video/v11.mp4",
-  "/work-video/v12.mp4",
-];
-
-const Work = ({ videoMode = "vimeo", baseRoute = "/work", useLocalWorkVideos = false } = {}) => {
+const Work = ({ videoMode = "vimeo", baseRoute = "/work" } = {}) => {
   const { workData: remoteWorkData } = useWorkData();
   const workData = remoteWorkData ?? staticWorkData;
 
@@ -214,27 +209,22 @@ const Work = ({ videoMode = "vimeo", baseRoute = "/work", useLocalWorkVideos = f
   const tabs = [
     { id: "video", label: "VIDEO" },
     { id: "photography", label: "PHOTOGRAPHY" },
-    { id: "3d_ai", label: "3D / AI" },
   ];
-  const shouldUseLocalWorkVideos = useLocalWorkVideos && baseRoute === "/work-copy";
+  const getResolvedBunnyUrl = (post) =>
+    post.bunnyUrl || post.bunnyPlaybackUrl || post.bunnyVideoUrl || null;
 
-  const getResolvedBunnyUrl = (post, videoIndex = 0) => {
-    const originalUrl =
-      post.bunnyUrl || post.bunnyPlaybackUrl || post.bunnyVideoUrl || null;
-    if (!originalUrl) return null;
-    if (!shouldUseLocalWorkVideos) return originalUrl;
-    if (!LOCAL_WORK_VIDEO_PATHS.length) return originalUrl;
-    const normalizedIndex =
-      Number.isFinite(videoIndex) && videoIndex >= 0 ? videoIndex : 0;
-    return LOCAL_WORK_VIDEO_PATHS[normalizedIndex % LOCAL_WORK_VIDEO_PATHS.length];
-  };
-
-  const handleVideoHover = (post, isEntering) => {
+  const handleVideoHover = (post, isEntering, videoIndex = 0) => {
     if (isEntering) {
-      if (videoMode !== "bunny" && activeTab === "video") {
-        setVimeoIframeRequested((prev) =>
-          prev[post.id] ? prev : { ...prev, [post.id]: true }
-        );
+      if (activeTab === "video") {
+        const bunnyUrl = getResolvedBunnyUrl(post, videoIndex);
+        const useBunnyPlayer = videoMode === "bunny" && bunnyUrl;
+        const yt = getYoutubeIdFromUrl(post.youtubeUrl || "");
+        const vid = post.vimeoUrl ? getVimeoIdFromUrl(post.vimeoUrl) : null;
+        if (!useBunnyPlayer && (vid || yt)) {
+          setVimeoIframeRequested((prev) =>
+            prev[post.id] ? prev : { ...prev, [post.id]: true }
+          );
+        }
       }
       setPlayingVideoId(post.id);
     } else {
@@ -436,22 +426,7 @@ const Work = ({ videoMode = "vimeo", baseRoute = "/work", useLocalWorkVideos = f
     setVisibleCount((prev) => prev + step);
   };
 
-  const allPosts = (() => {
-    if (activeTab === "3d_ai") {
-      const threeD = (workData["3d"] || []).map((p) => ({
-        ...p,
-        uid: `3d:${p.id}`,
-      }));
-      const ai = (workData["ai"] || []).map((p) => ({
-        ...p,
-        uid: `ai:${p.id}`,
-      }));
-      // Show AI items first (matches your request), then 3D
-      return [...ai, ...threeD];
-    }
-
-    return workData[activeTab] || [];
-  })();
+  const allPosts = workData[activeTab] || [];
   const currentPosts = allPosts.slice(0, visibleCount);
   const hasMore = allPosts.length > visibleCount;
 
@@ -511,7 +486,7 @@ const Work = ({ videoMode = "vimeo", baseRoute = "/work", useLocalWorkVideos = f
       cancelled = true;
       cleanups.forEach((fn) => fn());
     };
-  }, [activeTab, shouldUseLocalWorkVideos]);
+  }, [activeTab]);
 
   // Proactively warm the next "Load More" row (3 videos) before user clicks.
   useEffect(() => {
@@ -558,7 +533,7 @@ const Work = ({ videoMode = "vimeo", baseRoute = "/work", useLocalWorkVideos = f
     return () => {
       cleanups.forEach((fn) => fn());
     };
-  }, [visibleCount, activeTab, videoMode, shouldUseLocalWorkVideos]);
+  }, [visibleCount, activeTab, videoMode]);
 
   // Warm up the newly revealed video row after "Load More" so hover-play starts quicker.
   useEffect(() => {
@@ -612,7 +587,7 @@ const Work = ({ videoMode = "vimeo", baseRoute = "/work", useLocalWorkVideos = f
     return () => {
       cleanups.forEach((fn) => fn());
     };
-  }, [visibleCount, activeTab, videoMode, shouldUseLocalWorkVideos]);
+  }, [visibleCount, activeTab, videoMode]);
 
   const handleMediaLoaded = (postId) => {
     setLoadedMediaMap((prev) => {
@@ -843,11 +818,13 @@ const Work = ({ videoMode = "vimeo", baseRoute = "/work", useLocalWorkVideos = f
                   horizontalLinesRef.current[horizontalLineIndex] = React.createRef();
                 }
 
-                // Use per-post Vimeo URL in formats like https://vimeo.com/123456789
                 const vimeoUrl = post.vimeoUrl || null;
                 const vimeoId = vimeoUrl ? getVimeoIdFromUrl(vimeoUrl) : null;
-                // Bunny URLs are expected to be direct MP4 playback URLs
                 const bunnyUrl = getResolvedBunnyUrl(post, index);
+                const youtubeId = getYoutubeIdFromUrl(post.youtubeUrl || "");
+                const useBunnyPlayer = videoMode === "bunny" && bunnyUrl;
+                const useYoutube = !useBunnyPlayer && Boolean(youtubeId);
+                const useVimeo = !useBunnyPlayer && !useYoutube && Boolean(vimeoId);
 
                 const mediaReady = !!loadedMediaMap[post.id];
                 const isPlaying = playingVideoId === post.id;
@@ -858,12 +835,20 @@ const Work = ({ videoMode = "vimeo", baseRoute = "/work", useLocalWorkVideos = f
                     <div
                       className={styles.videoPost}
                       onClick={() => handlePostClick(post)}
-                      onMouseEnter={() => handleVideoHover(post, true)}
-                      onMouseLeave={() => handleVideoHover(post, false)}
+                      onMouseEnter={() => handleVideoHover(post, true, index)}
+                      onMouseLeave={() => handleVideoHover(post, false, index)}
                       style={{ animationDelay: `${index * 0.05}s` }}
                     >
                       <div className={styles.videoPostThumbnail}>
-                        {vimeoId && vimeoUrl && (
+                        {useYoutube && (
+                          <YouTubeThumbnail
+                            videoId={youtubeId}
+                            alt={post.title}
+                            className={styles.videoThumb}
+                            style={{ opacity: hideThumb ? 0 : 1 }}
+                          />
+                        )}
+                        {useVimeo && vimeoUrl && (
                           <VimeoThumbnail
                             vimeoUrl={vimeoUrl}
                             alt={post.title}
@@ -872,7 +857,7 @@ const Work = ({ videoMode = "vimeo", baseRoute = "/work", useLocalWorkVideos = f
                           />
                         )}
 
-                        {videoMode === "bunny" && bunnyUrl ? (
+                        {useBunnyPlayer ? (
                           <video
                             ref={(el) => {
                               if (el) videoRefs.current[post.id] = el;
@@ -894,9 +879,25 @@ const Work = ({ videoMode = "vimeo", baseRoute = "/work", useLocalWorkVideos = f
                               pointerEvents: isPlaying ? "auto" : "none",
                             }}
                           />
-                        ) : vimeoId &&
-                          vimeoUrl &&
-                          vimeoIframeRequested[post.id] ? (
+                        ) : useYoutube && vimeoIframeRequested[post.id] ? (
+                          <iframe
+                            loading="eager"
+                            ref={(el) => {
+                              if (el) iframeRefs.current[post.id] = el;
+                              else delete iframeRefs.current[post.id];
+                            }}
+                            src={getYoutubeEmbedSrcBackground(youtubeId)}
+                            className={styles.videoPlayer}
+                            title={post.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            onLoad={() => handleMediaLoaded(post.id)}
+                            style={{
+                              opacity: isPlaying && mediaReady ? 1 : 0,
+                              pointerEvents: isPlaying ? "auto" : "none",
+                            }}
+                          />
+                        ) : useVimeo && vimeoUrl && vimeoIframeRequested[post.id] ? (
                           <iframe
                             loading="eager"
                             ref={(el) => {
@@ -945,7 +946,7 @@ const Work = ({ videoMode = "vimeo", baseRoute = "/work", useLocalWorkVideos = f
               })}
             </div>
           ) : (
-            // Photography, 3D, AI Tabs - Masonry Layout, each "load more" batch in its own row
+            // Photography tab — masonry layout, each "load more" batch in its own row
             <div key={activeTab} className={styles.masonryRows}>
               {(() => {
                 const BATCH_SIZE = 12;
