@@ -1,0 +1,3 @@
+{
+  "_readme": "Keys are numeric work video ids (same as workData.js). Values are full YouTube watch, youtu.be, or embed URLs. Example: \"1\": \"https://www.youtube.com/watch?v=xxxxxxxxxxx\""
+}

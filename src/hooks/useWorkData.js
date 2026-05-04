@@ -28,6 +28,35 @@ function isValidWorkApiPayload(data) {
   return true;
 }
 
+/** Optional /work-youtube-overrides.json — keyed by legacy video id → full YouTube URL. */
+function applyYoutubeOverridesFromMap(workData, map) {
+  if (!map || typeof map !== "object") return workData;
+  const video = (workData.video || []).map((p) => {
+    const raw = map[String(p.id)] ?? map[p.id];
+    if (raw == null) return p;
+    const yt = String(raw).trim();
+    if (!yt) return p;
+    return { ...p, youtubeUrl: yt };
+  });
+  return { ...workData, video };
+}
+
+async function loadYoutubeOverrideMap() {
+  try {
+    const res = await fetch("/work-youtube-overrides.json", { cache: "no-store" });
+    if (!res.ok) return null;
+    const map = await res.json();
+    return map && typeof map === "object" ? map : null;
+  } catch {
+    return null;
+  }
+}
+
+async function withYoutubeOverrides(workData) {
+  const map = await loadYoutubeOverrideMap();
+  return map ? applyYoutubeOverridesFromMap(workData, map) : workData;
+}
+
 export function clearWorkDataCache() {
   apiWorkDataCache = null;
   inFlight = null;
@@ -67,12 +96,16 @@ export function useWorkData() {
       setLoading(true);
 
       if (shouldSkipApiFetchInThisBuild()) {
-        if (!cancelled) {
-          setWorkData(staticWorkData);
-          setSourceTracked("static");
-          setError(null);
+        try {
+          const merged = await withYoutubeOverrides(staticWorkData);
+          if (!cancelled) {
+            setWorkData(merged);
+            setSourceTracked("static");
+            setError(null);
+          }
+        } finally {
+          if (!cancelled) setLoading(false);
         }
-        setLoading(false);
         return;
       }
 
@@ -92,22 +125,27 @@ export function useWorkData() {
       try {
         const json = await inFlight;
         if (cancelled) return;
-        apiWorkDataCache = json;
         inFlight = null;
-        setWorkData(json);
+        const merged = await withYoutubeOverrides(json);
+        if (cancelled) return;
+        apiWorkDataCache = merged;
+        setWorkData(merged);
         setSourceTracked("api");
         setError(null);
       } catch (e) {
         inFlight = null;
         if (cancelled) return;
         console.warn("useWorkData: API failed, using static bundle", e);
-        setWorkData(staticWorkData);
-        setSourceTracked("static");
-        setError(
-          import.meta.env.DEV
-            ? "API unavailable — showing bundled workData. Start the API (see /server)."
-            : null
-        );
+        const merged = await withYoutubeOverrides(staticWorkData);
+        if (!cancelled) {
+          setWorkData(merged);
+          setSourceTracked("static");
+          setError(
+            import.meta.env.DEV
+              ? "API unavailable — showing bundled workData. Start the API (see /server)."
+              : null
+          );
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }

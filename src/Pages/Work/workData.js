@@ -1,4 +1,5 @@
-// Work data - replace with your actual data source or API
+// Work data — API overwrites this when VITE_API_URL is set. For static hosting,
+// add youtubeUrl on each video item or map ids in public/work-youtube-overrides.json.
 export const workData = {
   video: [
     {
